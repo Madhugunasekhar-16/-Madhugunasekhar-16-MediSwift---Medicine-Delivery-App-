@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
-
   const navigate = useNavigate();
 
   const [name, setName] = useState("");
@@ -13,6 +13,7 @@ const Register = () => {
   const [error, setError] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,7 +23,6 @@ const Register = () => {
     setLoading(true);
 
     try {
-
       const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
         method: "POST",
         headers: {
@@ -62,21 +62,18 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-blue-50">
-
       <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
 
         <h2 className="text-2xl font-bold text-center text-blue-600 mb-6">
           MediSwift Register
         </h2>
 
-        
         {message && (
           <div className="bg-green-100 text-green-700 text-center mb-4 px-4 py-2 rounded-lg">
             {message}
           </div>
         )}
 
-        
         {error && (
           <div className="bg-red-100 text-red-700 text-center mb-4 px-4 py-2 rounded-lg">
             {error}
@@ -103,14 +100,23 @@ const Register = () => {
             required
           />
 
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              className="w-full p-3 border rounded-lg pr-10 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-3 cursor-pointer text-gray-500"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
 
           <button
             type="submit"
@@ -134,7 +140,6 @@ const Register = () => {
         </p>
 
       </div>
-
     </div>
   );
 };
