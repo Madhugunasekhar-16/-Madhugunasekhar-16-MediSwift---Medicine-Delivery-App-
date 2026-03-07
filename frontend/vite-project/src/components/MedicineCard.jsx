@@ -39,6 +39,13 @@ const handleAddToCart = async () => {
     return (
         <div className="bg-white rounded-2xl shadow-lg p-6 w-full hover:shadow-2xl hover:-translate-y-1 transform transition    duration-300 border">
 
+            <img
+                src={medicine.image}
+                alt={medicine.name}
+                className="w-full h-40 object-cover rounded-lg"
+            />
+
+
             <h3 className="text-xl font-semibold mb-2">
                 {medicine.name}
              </h3>
