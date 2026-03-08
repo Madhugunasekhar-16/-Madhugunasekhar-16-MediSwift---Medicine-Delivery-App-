@@ -40,9 +40,9 @@ const handleAddToCart = async () => {
         <div className="bg-white rounded-2xl shadow-lg p-6 w-full hover:shadow-2xl hover:-translate-y-1 transform transition    duration-300 border">
 
             <img
-                src={medicine.image}
+                src={medicine.image || "https://via.placeholder.com/150"}
                 alt={medicine.name}
-                className="w-full h-40 object-cover rounded-lg"
+                className="w-full h-40 object-cover rounded"
             />
 
 
@@ -64,6 +64,12 @@ const handleAddToCart = async () => {
             <p className="text-lg font-bold text-green-600 mb-3">
                 ₹{medicine.price}
              </p>
+
+            <p className="text-sm text-gray-500">
+                Expiry: {medicine.expiryDate 
+                    ? new Date(medicine.expiryDate).toLocaleDateString()
+                    : "N/A"}
+            </p>
 
             <p className="text-sm mb-3">
                 {medicine.stock > 0 

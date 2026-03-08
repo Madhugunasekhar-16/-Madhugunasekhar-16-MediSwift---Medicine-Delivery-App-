@@ -2,7 +2,7 @@ const Medicine = require("../models/medicineModel.js");
 
 const addMedicine = async (req,res) => {
     try{
-        const { name, description, price, stock, prescriptionRequired, image } = req.body;
+        const { name, description, price, stock, prescriptionRequired, expiryDate, image  } = req.body;
 
         const newMedicine = await Medicine.create({
             name,
@@ -10,7 +10,8 @@ const addMedicine = async (req,res) => {
             price,
             stock,
             prescriptionRequired,
-            image,
+            expiryDate,
+            image 
         });
 
         res.status(201).json({
