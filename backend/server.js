@@ -20,11 +20,10 @@ const app = express();
 //connect DB
 connectDB();
 
-//middlewares
 app.use(cors({
-  origin: ["https://mediswift-frontend.onrender.com", "http://localhost:5173"], 
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
+    origin: "https://mediswift-frontend-62cb.onrender.com",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
 }));
 app.use(express.json());
 
