@@ -21,7 +21,11 @@ const app = express();
 connectDB();
 
 //middlewares
-app.use(cors());
+app.use(cors({
+  origin: ["https://mediswift-frontend.onrender.com", "http://localhost:5173"], 
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
 app.use(express.json());
 
 //routes
@@ -44,7 +48,8 @@ app.get("/api/test-admin", protect, adminOnly, (req, res) => {
   res.json({ message: "Admin access granted successfully" });
 });
 
-const port = 5000;
+
+const port = process.env.PORT || 5000;
 
 app.listen(port, () => {
     console.log(`server is running on the port ${port}`);
