@@ -19,6 +19,9 @@ const medicineSchema = new mongoose.Schema(
             required : true,
             default : 0,
         },
+        expiryDate : {
+            type : Date,
+        },
         prescriptionRequired : {
             type : Boolean,
             default : false,
