@@ -36,7 +36,7 @@ const Navbar = () => {
     navigate("/login");
   };
 
-  // Reusable Tailwind class for links to ensure consistency
+  // Reusable Tailwind class for links with the blue rounded-box hover
   const navLinkClasses = "no-underline text-gray-700 font-medium text-[0.95rem] px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-600 hover:text-white flex items-center gap-2";
 
   return (
@@ -51,11 +51,12 @@ const Navbar = () => {
       {/* RIGHT SIDE NAV */}
       <div className="flex items-center gap-2">
         
-        {/* Always-visible links */}
+        {/* Home Link - Removed the blue underline style */}
         <Link to="/" className={navLinkClasses}>
           Home
         </Link>
 
+        {/* Medicines and Cart now use the navLinkClasses for the hover box effect */}
         <Link to="/medicines" className={navLinkClasses}>
           Medicines
         </Link>
@@ -85,11 +86,14 @@ const Navbar = () => {
             {/* Separator */}
             <div className="h-6 w-[1px] bg-slate-300 mx-3" />
 
-            {/* User Profile Pill */}
-            <span className="flex items-center gap-2 bg-white text-blue-700 border border-blue-200 px-4 py-1.5 rounded-full text-[0.85rem] font-semibold mr-2">
+            {/* Profile Button - Changed from <span> to <Link> to make it work */}
+            <Link 
+              to="/profile" 
+              className="no-underline flex items-center gap-2 bg-white text-blue-700 border border-blue-200 px-4 py-1.5 rounded-full text-[0.85rem] font-semibold mr-2 transition-all hover:bg-blue-50 hover:border-blue-300"
+            >
               <FaUser className="text-[11px]" />
               {user.name} {user.role === "admin" && "(Admin)"}
-            </span>
+            </Link>
 
             <button
               onClick={handleLogout}
@@ -99,11 +103,10 @@ const Navbar = () => {
             </button>
           </>
         ) : (
-          /* GUEST STATE */
           <div className="flex items-center gap-4 ml-2">
             <Link
               to="/login"
-              className="no-underline border-1.5 border-blue-600 text-blue-600 px-6 py-2 rounded-lg text-[0.9rem] font-semibold hover:bg-blue-50 transition-all"
+              className="no-underline border-[1.5px] border-blue-600 text-blue-600 px-6 py-2 rounded-lg text-[0.9rem] font-semibold hover:bg-blue-50 transition-all"
             >
               Login
             </Link>
