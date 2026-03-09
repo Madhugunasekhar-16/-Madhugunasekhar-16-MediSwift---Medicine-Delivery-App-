@@ -21,6 +21,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 import AdminLayout from "./components/AdminLayout";
 import UserLayout from "./layouts/UserLayout";
+import Navbar from "./components/Navbar"; // ← ADD THIS IMPORT
 
 import { AuthContext } from "./context/AuthContext";
 
@@ -48,21 +49,47 @@ function App() {
   return (
     <Routes>
 
-      {/* LANDING PAGE */}
-      <Route path="/" element={<Home />} />
+      {/* LANDING PAGE — wrapped with Navbar */}
+      <Route
+        path="/"
+        element={
+          <>
+            <Navbar />
+            <Home />
+          </>
+        }
+      />
 
-      {/* AUTH ROUTES */}
+      {/* AUTH ROUTES — also show Navbar so users can navigate */}
       <Route
         path="/login"
-        element={user ? <Navigate to="/medicines" replace /> : <Login />}
+        element={
+          user ? (
+            <Navigate to="/medicines" replace />
+          ) : (
+            <>
+              <Navbar />
+              <Login />
+            </>
+          )
+        }
       />
 
       <Route
         path="/register"
-        element={user ? <Navigate to="/medicines" replace /> : <Register />}
+        element={
+          user ? (
+            <Navigate to="/medicines" replace />
+          ) : (
+            <>
+              <Navbar />
+              <Register />
+            </>
+          )
+        }
       />
 
-      {/* USER ROUTES */}
+      {/* USER ROUTES — Navbar is handled inside UserLayout */}
       <Route
         path="/medicines"
         element={
