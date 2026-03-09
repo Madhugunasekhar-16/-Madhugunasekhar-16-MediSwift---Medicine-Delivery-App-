@@ -47,6 +47,7 @@ const Navbar = () => {
         <span className="text-blue-600">Medi</span><span className="text-slate-800">Swift</span>
       </Link>
 
+      {/* MOBILE ACTIONS */}
       <div className="flex items-center gap-3 md:hidden z-[101]">
         {user && user.role !== "admin" && (
           <Link to="/cart" className="relative text-blue-600 text-xl p-2">
@@ -56,14 +57,23 @@ const Navbar = () => {
             )}
           </Link>
         )}
-        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-2xl text-slate-800 p-2"><FaBars /></button>
+        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-2xl text-slate-800 p-2">
+          {isMenuOpen ? <FaTimes /> : <FaBars />}
+        </button>
       </div>
 
+      {/* DESKTOP NAV */}
       <div className="hidden md:flex items-center gap-1">
         <Link to="/" className={navLinkClasses}>Home</Link>
         <Link to="/medicines" className={navLinkClasses}>Medicines</Link>
-        <Link to="/about" className={navLinkClasses}>About Us</Link>
-        <Link to="/contact" className={navLinkClasses}>Contact</Link>
+        
+        {/* LOGIC: Hide when logged in */}
+        {!user && (
+          <>
+            <Link to="/about" className={navLinkClasses}>About Us</Link>
+            <Link to="/contact" className={navLinkClasses}>Contact</Link>
+          </>
+        )}
 
         {user ? (
           <div className="flex items-center ml-2">
@@ -89,22 +99,36 @@ const Navbar = () => {
         )}
       </div>
 
-      {/* Mobile Menu Overlay */}
-      {isMenuOpen && (
-        <div className="fixed inset-0 bg-white z-[100] pt-20 px-6 md:hidden">
-          <button onClick={() => setIsMenuOpen(false)} className="absolute top-5 right-5 text-2xl"><FaTimes /></button>
-          <div className="flex flex-col">
-            <Link to="/" onClick={() => setIsMenuOpen(false)} className={mobileLinkClasses}>Home</Link>
-            <Link to="/medicines" onClick={() => setIsMenuOpen(false)} className={mobileLinkClasses}>Medicines</Link>
-            <Link to="/about" onClick={() => setIsMenuOpen(false)} className={mobileLinkClasses}>About Us</Link>
-            <Link to="/contact" onClick={() => setIsMenuOpen(false)} className={mobileLinkClasses}>Contact</Link>
-            {user && user.role === "admin" && (
-              <Link to="/admin/dashboard" onClick={() => setIsMenuOpen(false)} className={mobileLinkClasses}><FaChartLine /> Admin Dashboard</Link>
-            )}
-            <button onClick={handleLogout} className="w-full bg-red-500 text-white py-4 rounded-xl font-bold mt-4">Logout</button>
-          </div>
+      {/* MOBILE OVERLAY */}
+      <div className={`fixed inset-0 bg-white z-[100] transition-transform duration-300 transform ${isMenuOpen ? "translate-y-0" : "-translate-y-full"} md:hidden pt-20 px-6`}>
+        <div className="flex flex-col">
+          <Link to="/" onClick={() => setIsMenuOpen(false)} className={mobileLinkClasses}>Home</Link>
+          <Link to="/medicines" onClick={() => setIsMenuOpen(false)} className={mobileLinkClasses}>Medicines</Link>
+          
+          {/* LOGIC: Hide when logged in */}
+          {!user && (
+            <>
+              <Link to="/about" onClick={() => setIsMenuOpen(false)} className={mobileLinkClasses}>About Us</Link>
+              <Link to="/contact" onClick={() => setIsMenuOpen(false)} className={mobileLinkClasses}>Contact</Link>
+            </>
+          )}
+          
+          {user ? (
+            <div className="mt-4 space-y-4">
+              <Link to="/profile" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 text-blue-600 font-bold text-lg"><FaUser /> Profile</Link>
+              {user.role === "admin" && (
+                <Link to="/admin/dashboard" onClick={() => setIsMenuOpen(false)} className={mobileLinkClasses}><FaChartLine /> Admin Dashboard</Link>
+              )}
+              <button onClick={handleLogout} className="w-full bg-red-500 text-white py-4 rounded-xl font-bold mt-4">Logout</button>
+            </div>
+          ) : (
+            <div className="mt-8 flex flex-col gap-4">
+              <Link to="/login" onClick={() => setIsMenuOpen(false)} className="text-center py-4 border-2 border-blue-600 text-blue-600 rounded-xl font-bold">Login</Link>
+              <Link to="/register" onClick={() => setIsMenuOpen(false)} className="text-center py-4 bg-blue-600 text-white rounded-xl font-bold">Register</Link>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </nav>
   );
 };

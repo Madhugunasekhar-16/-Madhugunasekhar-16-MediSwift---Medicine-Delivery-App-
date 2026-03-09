@@ -9,7 +9,7 @@ const Home = () => {
   // ADMIN REDIRECT GUARD
   useEffect(() => {
     if (user?.role === "admin") {
-      navigate("/admin-dashboard");
+      navigate("/admin/dashboard");
     }
   }, [user, navigate]);
 

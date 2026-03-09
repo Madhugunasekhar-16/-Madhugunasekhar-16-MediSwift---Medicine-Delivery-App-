@@ -47,8 +47,16 @@ function App() {
       <main className={!isAdminRoute ? "min-h-[80vh]" : ""}>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
+          
+          {/* Redirect logged-in users away from marketing pages */}
+          <Route 
+            path="/about" 
+            element={user ? <Navigate to="/" replace /> : <AboutPage />} 
+          />
+          <Route 
+            path="/contact" 
+            element={user ? <Navigate to="/" replace /> : <ContactPage />} 
+          />
           
           <Route path="/login" element={user ? <Navigate to="/medicines" replace /> : <Login />} />
           <Route path="/register" element={user ? <Navigate to="/medicines" replace /> : <Register />} />
@@ -59,7 +67,7 @@ function App() {
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/my-orders" element={<ProtectedRoute><MyOrders /></ProtectedRoute>} />
 
-          {/* ADMIN NESTED ROUTES */}
+          {/* NESTED ADMIN ROUTES */}
           <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="orders" element={<AdminOrders />} />
