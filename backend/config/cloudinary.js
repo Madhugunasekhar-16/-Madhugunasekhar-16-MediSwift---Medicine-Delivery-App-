@@ -6,14 +6,4 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const uploadToCloudinary = async (fileBuffer) => {
-  const base64Image = `data:image/jpeg;base64,${fileBuffer.toString("base64")}`;
-
-  const result = await cloudinary.uploader.upload(base64Image, {
-    folder: "prescriptions",
-  });
-
-  return result;
-};
-
-module.exports = { uploadToCloudinary };
+module.exports = cloudinary;

@@ -1,24 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const upload = require("../middleware/uploadMiddleware");
-
-const { addMedicine, getAllMedicines, updateMedicine, deleteMedicine } = require("../controllers/medicineController.js");
+const { addMedicine, getAllMedicines, getMedicineById, updateMedicine, deleteMedicine } = require("../controllers/medicineController.js");
 const { protect, adminOnly } = require("../middleware/authMiddleware.js");
 
-//addmedicine for admin
-router.post("/", protect, adminOnly, addMedicine );
-
-router.post("/", protect, adminOnly, upload.single("image"), addMedicine);
-
-//getmedicines for public
 router.get("/", getAllMedicines);
+router.get("/:id", getMedicineById); //  needed for EditMedicine page
 
-//update medicine
-router.put("/:id", protect, adminOnly, updateMedicine);
+router.post("/", protect, adminOnly, upload.single("image"), addMedicine); //  single route only
 
+router.put("/:id", protect, adminOnly, upload.single("image"), updateMedicine); //  supports image update
 
-//delete medicine
 router.delete("/:id", protect, adminOnly, deleteMedicine);
-
 
 module.exports = router;
