@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect, useContext } from "react";
 
+// Pages
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -9,7 +10,10 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/CheckOut";
 import MyOrders from "./pages/MyOrders";
 import Profile from "./pages/Profile";
+import AboutPage from "./pages/AboutPage";
+import ContactPage from "./pages/ContactPage";
 
+// Admin Pages
 import AdminOrders from "./pages/AdminOrders";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminMedicines from "./pages/AdminMedicines";
@@ -17,11 +21,13 @@ import EditMedicine from "./pages/EditMedicines";
 import AddMedicine from "./pages/AddMedicines";
 import AdminUsers from "./pages/AdminUsers";
 
+// Components & Layouts
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 import AdminLayout from "./components/AdminLayout";
-import UserLayout from "./layouts/UserLayout";
-import Navbar from "./components/Navbar"; // ← ADD THIS IMPORT
+import UserLayout from "./layouts/UserLayout"; // This usually contains Navbar + Footer
+import Navbar from "./components/Navbar"; 
+import Footer from "./components/Footer"; 
 
 import { AuthContext } from "./context/AuthContext";
 
@@ -29,16 +35,12 @@ function App() {
   const { user, logout } = useContext(AuthContext);
   const location = useLocation();
 
-  const isAdminRoute = location.pathname.startsWith("/admin");
-
   // Auto logout after 24 hours
   useEffect(() => {
     const loginTime = Number(localStorage.getItem("loginTime"));
-
     if (loginTime) {
       const now = Date.now();
       const oneDay = 24 * 60 * 60 * 1000;
-
       if (now - loginTime > oneDay) {
         logout();
         window.location.href = "/login";
@@ -47,122 +49,61 @@ function App() {
   }, [logout]);
 
   return (
-    <Routes>
+    <>
+      {/* Logic: If it's an admin route, we let AdminLayout handle the UI.
+          If it's NOT admin, we show the Navbar and Footer globally.
+      */}
+      {!location.pathname.startsWith("/admin") && <Navbar />}
 
-      {/* LANDING PAGE — wrapped with Navbar */}
-      <Route
-        path="/"
-        element={
-          <>
-            <Navbar />
-            <Home />
-          </>
-        }
-      />
+      <main className={!location.pathname.startsWith("/admin") ? "min-h-[80vh]" : ""}>
+        <Routes>
+          {/* --- PUBLIC ROUTES --- */}
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
 
-      {/* AUTH ROUTES — also show Navbar so users can navigate */}
-      <Route
-        path="/login"
-        element={
-          user ? (
-            <Navigate to="/medicines" replace />
-          ) : (
-            <>
-              <Navbar />
-              <Login />
-            </>
-          )
-        }
-      />
+          {/* --- AUTH ROUTES (Guest Only) --- */}
+          <Route
+            path="/login"
+            element={user ? <Navigate to="/medicines" replace /> : <Login />}
+          />
+          <Route
+            path="/register"
+            element={user ? <Navigate to="/medicines" replace /> : <Register />}
+          />
 
-      <Route
-        path="/register"
-        element={
-          user ? (
-            <Navigate to="/medicines" replace />
-          ) : (
-            <>
-              <Navbar />
-              <Register />
-            </>
-          )
-        }
-      />
+          {/* --- PROTECTED USER ROUTES --- */}
+          <Route path="/medicines" element={<ProtectedRoute><Medicines /></ProtectedRoute>} />
+          <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+          <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/my-orders" element={<ProtectedRoute><MyOrders /></ProtectedRoute>} />
 
-      {/* USER ROUTES — Navbar is handled inside UserLayout */}
-      <Route
-        path="/medicines"
-        element={
-          <ProtectedRoute>
-            <UserLayout>
-              <Medicines />
-            </UserLayout>
-          </ProtectedRoute>
-        }
-      />
+          {/* --- ADMIN ROUTES (Nested) --- */}
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminLayout />
+              </AdminRoute>
+            }
+          >
+            {/* These paths become /admin/dashboard, /admin/orders, etc. */}
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="orders" element={<AdminOrders />} />
+            <Route path="medicines" element={<AdminMedicines />} />
+            <Route path="edit-medicine/:id" element={<EditMedicine />} />
+            <Route path="add-medicine" element={<AddMedicine />} />
+            <Route path="users" element={<AdminUsers />} />
+          </Route>
 
-      <Route
-        path="/cart"
-        element={
-          <ProtectedRoute>
-            <UserLayout>
-              <Cart />
-            </UserLayout>
-          </ProtectedRoute>
-        }
-      />
+          {/* Fallback Route */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
 
-      <Route
-        path="/checkout"
-        element={
-          <ProtectedRoute>
-            <UserLayout>
-              <Checkout />
-            </UserLayout>
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/profile"
-        element={
-          <ProtectedRoute>
-            <UserLayout>
-              <Profile />
-            </UserLayout>
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/my-orders"
-        element={
-          <ProtectedRoute>
-            <UserLayout>
-              <MyOrders />
-            </UserLayout>
-          </ProtectedRoute>
-        }
-      />
-
-      {/* ADMIN ROUTES */}
-      <Route
-        path="/admin"
-        element={
-          <AdminRoute>
-            <AdminLayout />
-          </AdminRoute>
-        }
-      >
-        <Route path="dashboard" element={<AdminDashboard />} />
-        <Route path="orders" element={<AdminOrders />} />
-        <Route path="medicines" element={<AdminMedicines />} />
-        <Route path="edit-medicine/:id" element={<EditMedicine />} />
-        <Route path="add-medicine" element={<AddMedicine />} />
-        <Route path="users" element={<AdminUsers />} />
-      </Route>
-
-    </Routes>
+      {!location.pathname.startsWith("/admin") && <Footer />}
+    </>
   );
 }
 

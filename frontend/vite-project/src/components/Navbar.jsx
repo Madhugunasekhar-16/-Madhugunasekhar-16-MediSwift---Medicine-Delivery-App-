@@ -61,6 +61,14 @@ const Navbar = () => {
           Medicines
         </Link>
 
+        <Link to="/about" className={navLinkClasses}>
+          About Us
+        </Link>
+
+        <Link to="/contact" className={navLinkClasses}>
+          Contact
+        </Link>
+
         {user ? (
           <>
             {user.role === "admin" ? (
