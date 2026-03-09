@@ -57,7 +57,7 @@ const Navbar = () => {
       {/* LOGO */}
       <Link
         to="/"
-        className="text-2xl font-bold text-orange-500 hover:scale-105 transition"
+        className="text-2xl font-bold text-orange-500 tracking-wide hover:scale-105 transition"
       >
         MediSwift
       </Link>
