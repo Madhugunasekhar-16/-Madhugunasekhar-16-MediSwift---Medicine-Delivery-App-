@@ -167,7 +167,6 @@ const Navbar = () => {
   // FETCH CART LOGIC
   useEffect(() => {
     const fetchCartCount = async () => {
-      // FIX: Only fetch if user exists and is NOT an admin
       if (!user || user.role === "admin") {
         setCartCount(0);
         return;
@@ -197,32 +196,47 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white shadow-sm px-8 py-4 flex justify-between items-center border-b border-gray-100">
+    <nav className="sticky top-0 z-50 bg-blue-50 px-10 py-4 flex justify-between items-center border-b border-blue-100">
       {/* LOGO */}
-      <Link to="/" className="text-2xl font-bold text-blue-600 tracking-tight flex items-center gap-2">
-        <div className="bg-blue-600 text-white p-1 rounded-lg">
-          <span className="text-sm">MS</span>
-        </div>
-        MediSwift
+      <Link
+        to="/"
+        className="text-2xl font-extrabold tracking-tight"
+        style={{ fontFamily: "'Georgia', serif" }}
+      >
+        <span className="border-2 border-blue-600 text-blue-600 px-2 py-0.5 rounded-md mr-0.5">
+          Medi
+        </span>
+        <span className="text-gray-800">Swift</span>
       </Link>
 
-      {/* DYNAMIC NAVIGATION LINKS */}
-      <div className="flex items-center gap-8 font-medium text-gray-600">
-        <Link to="/" className="hover:text-blue-600 transition">Home</Link>
-        <Link to="/medicines" className="hover:text-blue-600 transition">Medicines</Link>
+      {/* NAVIGATION */}
+      <div className="flex items-center gap-8 font-medium text-gray-700">
+        {/* Always visible links */}
+        <Link
+          to="/"
+          className="text-blue-600 font-semibold border-b-2 border-blue-600 pb-0.5 hover:text-blue-700 transition"
+        >
+          Home
+        </Link>
+        <Link to="/medicines" className="hover:text-blue-600 transition">
+          Medicines
+        </Link>
 
-        {/* CONDITION 1: LOGGED IN USER */}
         {user ? (
           <>
-            {/* ADMIN ONLY */}
             {user.role === "admin" ? (
-              <Link to="/admin-dashboard" className="flex items-center gap-2 text-blue-600 font-bold hover:text-blue-700">
+              <Link
+                to="/admin-dashboard"
+                className="flex items-center gap-2 text-blue-600 font-bold hover:text-blue-700"
+              >
                 <FaChartLine /> Admin Dashboard
               </Link>
             ) : (
-              /* CUSTOMER ONLY */
               <>
-                <Link to="/cart" className="relative hover:text-blue-600 transition flex items-center gap-1">
+                <Link
+                  to="/cart"
+                  className="relative hover:text-blue-600 transition flex items-center gap-1"
+                >
                   <FaShoppingCart /> Cart
                   {cartCount > 0 && (
                     <span className="absolute -top-2 -right-3 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border border-white">
@@ -230,31 +244,39 @@ const Navbar = () => {
                     </span>
                   )}
                 </Link>
-                <Link to="/my-orders" className="hover:text-blue-600 transition">My Orders</Link>
+                <Link to="/my-orders" className="hover:text-blue-600 transition">
+                  My Orders
+                </Link>
               </>
             )}
 
-            <div className="h-6 w-[1px] bg-gray-200 mx-2"></div>
-            
-            {/* PROFILE INFO & LOGOUT (Common for User & Admin) */}
-            <span className="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-1.5 rounded-full text-sm font-semibold">
+            <div className="h-6 w-[1px] bg-gray-300 mx-1"></div>
+
+            {/* Profile & Logout */}
+            <span className="flex items-center gap-2 bg-white text-blue-700 px-4 py-1.5 rounded-full text-sm font-semibold border border-blue-200">
               <FaUser className="text-xs" />
               {user.name} {user.role === "admin" && "(Admin)"}
             </span>
-            <button 
-              onClick={handleLogout} 
-              className="bg-red-500 text-white px-4 py-1.5 rounded-lg hover:bg-red-600 transition text-sm shadow-md"
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 text-white px-4 py-1.5 rounded-lg hover:bg-red-600 transition text-sm shadow-sm"
             >
               Logout
             </button>
           </>
         ) : (
-          /* CONDITION 2: GUEST (NOT LOGGED IN) */
+          /* GUEST: Login + Register styled like reference image */
           <>
-            <Link to="/login" className="border border-blue-600 text-blue-600 px-5 py-2 rounded-full hover:bg-blue-50 transition">
+            <Link
+              to="/login"
+              className="border border-blue-600 text-blue-600 px-6 py-2 rounded-md font-semibold hover:bg-blue-50 transition text-sm"
+            >
               Login
             </Link>
-            <Link to="/register" className="bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700 shadow-md shadow-blue-200 transition">
+            <Link
+              to="/register"
+              className="bg-blue-600 text-white px-6 py-2 rounded-md font-semibold hover:bg-blue-700 transition text-sm shadow-sm"
+            >
               Register
             </Link>
           </>
