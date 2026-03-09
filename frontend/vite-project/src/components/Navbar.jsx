@@ -21,10 +21,7 @@ const Navbar = () => {
         });
         const data = await response.json();
         if (response.ok && data.items) {
-          const totalItems = data.items.reduce(
-            (sum, item) => sum + item.quantity,
-            0
-          );
+          const totalItems = data.items.reduce((sum, item) => sum + item.quantity, 0);
           setCartCount(totalItems);
         }
       } catch (error) {
@@ -39,213 +36,84 @@ const Navbar = () => {
     navigate("/login");
   };
 
+  // Reusable Tailwind class for links to ensure consistency
+  const navLinkClasses = "no-underline text-gray-700 font-medium text-[0.95rem] px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-600 hover:text-white flex items-center gap-2";
+
   return (
-    <nav
-      style={{
-        backgroundColor: "#EEF4FF",
-        borderBottom: "1px solid #C7D9F8",
-        position: "sticky",
-        top: 0,
-        zIndex: 50,
-        width: "100%",
-        padding: "14px 48px",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        boxSizing: "border-box",
-      }}
-    >
-      {/* LOGO — "MediSwift" with colored Medi, no box */}
-      <Link
-        to="/"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          textDecoration: "none",
-          fontFamily: "'Segoe UI', sans-serif",
-          fontSize: "1.5rem",
-          fontWeight: "800",
-          letterSpacing: "-0.5px",
-        }}
-      >
-        <span style={{ color: "#2563EB" }}>Medi</span>
-        <span style={{ color: "#1e293b" }}>Swift</span>
+    <nav className="sticky top-0 z-50 w-full bg-[#EEF4FF] border-b border-[#C7D9F8] px-12 py-3.5 flex justify-between items-center box-border">
+      
+      {/* LOGO */}
+      <Link to="/" className="no-underline flex items-center font-sans text-2xl font-extrabold tracking-tight">
+        <span className="text-blue-600">Medi</span>
+        <span className="text-slate-800">Swift</span>
       </Link>
 
       {/* RIGHT SIDE NAV */}
-      <div style={{ display: "flex", alignItems: "center", gap: "32px" }}>
-
+      <div className="flex items-center gap-2">
+        
         {/* Always-visible links */}
-        <Link
-          to="/"
-          style={{
-            color: "#2563EB",
-            fontWeight: "600",
-            textDecoration: "none",
-            fontSize: "0.95rem",
-            borderBottom: "2px solid #2563EB",
-            paddingBottom: "2px",
-          }}
-        >
+        <Link to="/" className={navLinkClasses}>
           Home
         </Link>
 
-        <Link
-          to="/medicines"
-          style={{
-            color: "#374151",
-            fontWeight: "500",
-            textDecoration: "none",
-            fontSize: "0.95rem",
-          }}
-        >
+        <Link to="/medicines" className={navLinkClasses}>
           Medicines
         </Link>
 
         {user ? (
           <>
             {user.role === "admin" ? (
-              <Link
-                to="/admin-dashboard"
-                style={{
-                  color: "#2563EB",
-                  fontWeight: "700",
-                  textDecoration: "none",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  fontSize: "0.95rem",
-                }}
-              >
+              <Link to="/admin-dashboard" className={`${navLinkClasses} text-blue-600 font-bold`}>
                 <FaChartLine /> Admin Dashboard
               </Link>
             ) : (
               <>
-                <Link
-                  to="/cart"
-                  style={{
-                    color: "#374151",
-                    textDecoration: "none",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "5px",
-                    position: "relative",
-                    fontWeight: "500",
-                    fontSize: "0.95rem",
-                  }}
-                >
+                <Link to="/cart" className={`relative ${navLinkClasses}`}>
                   <FaShoppingCart /> Cart
                   {cartCount > 0 && (
-                    <span
-                      style={{
-                        position: "absolute",
-                        top: "-8px",
-                        right: "-12px",
-                        backgroundColor: "#EF4444",
-                        color: "white",
-                        fontSize: "10px",
-                        width: "16px",
-                        height: "16px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRadius: "50%",
-                        border: "1px solid white",
-                      }}
-                    >
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border border-white">
                       {cartCount}
                     </span>
                   )}
                 </Link>
-                <Link
-                  to="/my-orders"
-                  style={{
-                    color: "#374151",
-                    textDecoration: "none",
-                    fontWeight: "500",
-                    fontSize: "0.95rem",
-                  }}
-                >
+                <Link to="/my-orders" className={navLinkClasses}>
                   My Orders
                 </Link>
               </>
             )}
 
-            <div
-              style={{
-                height: "24px",
-                width: "1px",
-                backgroundColor: "#CBD5E1",
-              }}
-            />
+            {/* Separator */}
+            <div className="h-6 w-[1px] bg-slate-300 mx-3" />
 
-            <span
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                backgroundColor: "#ffffff",
-                color: "#1d4ed8",
-                border: "1px solid #BFDBFE",
-                padding: "5px 14px",
-                borderRadius: "999px",
-                fontSize: "0.85rem",
-                fontWeight: "600",
-              }}
-            >
-              <FaUser style={{ fontSize: "11px" }} />
+            {/* User Profile Pill */}
+            <span className="flex items-center gap-2 bg-white text-blue-700 border border-blue-200 px-4 py-1.5 rounded-full text-[0.85rem] font-semibold mr-2">
+              <FaUser className="text-[11px]" />
               {user.name} {user.role === "admin" && "(Admin)"}
             </span>
 
             <button
               onClick={handleLogout}
-              style={{
-                backgroundColor: "#EF4444",
-                color: "#ffffff",
-                padding: "7px 18px",
-                borderRadius: "8px",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "0.875rem",
-                fontWeight: "600",
-              }}
+              className="bg-red-500 text-white px-5 py-2 rounded-lg border-none cursor-pointer text-[0.875rem] font-semibold hover:bg-red-600 transition-colors shadow-sm"
             >
               Logout
             </button>
           </>
         ) : (
-          /* GUEST STATE — matches reference exactly */
-          <>
+          /* GUEST STATE */
+          <div className="flex items-center gap-4 ml-2">
             <Link
               to="/login"
-              style={{
-                border: "1.5px solid #2563EB",
-                color: "#2563EB",
-                padding: "7px 24px",
-                borderRadius: "8px",
-                textDecoration: "none",
-                fontSize: "0.9rem",
-                fontWeight: "600",
-                backgroundColor: "transparent",
-              }}
+              className="no-underline border-1.5 border-blue-600 text-blue-600 px-6 py-2 rounded-lg text-[0.9rem] font-semibold hover:bg-blue-50 transition-all"
             >
               Login
             </Link>
             <Link
               to="/register"
-              style={{
-                backgroundColor: "#2563EB",
-                color: "#ffffff",
-                padding: "7px 24px",
-                borderRadius: "8px",
-                textDecoration: "none",
-                fontSize: "0.9rem",
-                fontWeight: "600",
-              }}
+              className="no-underline bg-blue-600 text-white px-6 py-2 rounded-lg text-[0.9rem] font-semibold hover:bg-blue-700 shadow-md transition-all"
             >
               Register
             </Link>
-          </>
+          </div>
         )}
       </div>
     </nav>
