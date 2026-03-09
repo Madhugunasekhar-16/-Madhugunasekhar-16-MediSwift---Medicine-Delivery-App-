@@ -1,159 +1,3 @@
-/* import { Link, useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
-import { FaUser } from "react-icons/fa";
-
-import { AuthContext } from "../context/AuthContext";
-
-const Navbar = () => {
-  const { user, logout } = useContext(AuthContext);
-  const navigate = useNavigate();
-  const [cartCount, setCartCount] = useState(0);
-
-  useEffect(() => {
-    const fetchCartCount = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/cart`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        const data = await response.json();
-
-        if (response.ok && data.items) {
-          const totalItems = data.items.reduce(
-            (sum, item) => sum + item.quantity,
-            0
-          );
-
-          setCartCount(totalItems);
-        }
-      } catch (error) {
-        console.error("Error fetching cart count", error);
-      }
-    };
-
-    fetchCartCount();
-
-    const interval = setInterval(fetchCartCount, 5000);
-
-    return () => clearInterval(interval);
-  }, [user]);
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
-
-  return (
-    <nav className="sticky top-0 z-50 bg-white shadow-md px-8 py-4 flex justify-between items-center">
-
-
-      <Link
-        to="/"
-        className="text-2xl font-bold text-orange-500 tracking-wide hover:scale-105 transition"
-      >
-        MediSwift
-      </Link>
-
-   
-      <div className="flex items-center gap-6 font-medium text-gray-700">
-
-        <Link to="/" className="hover:text-orange-500 transition">
-          Home
-        </Link>
-
-        <Link to="/medicines" className="hover:text-orange-500 transition">
-          Medicines
-        </Link>
-
-        {user && (
-          <>
-           
-            <Link
-              to="/cart"
-              className="relative hover:text-orange-500 transition"
-            >
-              Cart
-
-              {cartCount > 0 && (
-                <span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                  {cartCount}
-                </span>
-              )}
-            </Link>
-
-            <Link to="/checkout" className="hover:text-orange-500 transition">
-              Checkout
-            </Link>
-
-            <Link to="/my-orders" className="hover:text-orange-500 transition">
-              My Orders
-            </Link>
-          </>
-        )}
-
-      
-        {user?.role === "admin" && (
-          <Link
-            to="/admin/dashboard"
-            className="hover:text-orange-500 transition"
-          >
-            Admin
-          </Link>
-        )}
-
-      
-        {!user ? (
-          <>
-            <Link
-              to="/login"
-              className="border border-orange-500 text-orange-500 px-4 py-2 rounded-lg hover:bg-orange-100 transition"
-            >
-              Login
-            </Link>
-
-            <Link
-              to="/register"
-              className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition"
-            >
-              Register
-            </Link>
-          </>
-        ) : (
-          <>
-         
-            <Link
-              to="/profile"
-              className="flex items-center gap-2 bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm font-semibold hover:bg-orange-200 transition"
-            >
-              <FaUser />
-              {user.name}
-            </Link>
-
-          
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
-            >
-              Logout
-            </button>
-          </>
-        )}
-      </div>
-    </nav>
-  );
-};
-
-export default Navbar; */
-
-
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { FaUser, FaShoppingCart, FaChartLine } from "react-icons/fa";
@@ -164,14 +8,12 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [cartCount, setCartCount] = useState(0);
 
-  // FETCH CART LOGIC
   useEffect(() => {
     const fetchCartCount = async () => {
       if (!user || user.role === "admin") {
         setCartCount(0);
         return;
       }
-
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(`${import.meta.env.VITE_API_URL}/cart`, {
@@ -179,14 +21,16 @@ const Navbar = () => {
         });
         const data = await response.json();
         if (response.ok && data.items) {
-          const totalItems = data.items.reduce((sum, item) => sum + item.quantity, 0);
+          const totalItems = data.items.reduce(
+            (sum, item) => sum + item.quantity,
+            0
+          );
           setCartCount(totalItems);
         }
       } catch (error) {
         console.error("Error fetching cart count", error);
       }
     };
-
     fetchCartCount();
   }, [user]);
 
@@ -196,29 +40,65 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-blue-50 px-10 py-4 flex justify-between items-center border-b border-blue-100">
-      {/* LOGO */}
+    <nav
+      style={{
+        backgroundColor: "#EEF4FF",
+        borderBottom: "1px solid #C7D9F8",
+        position: "sticky",
+        top: 0,
+        zIndex: 50,
+        width: "100%",
+        padding: "14px 48px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        boxSizing: "border-box",
+      }}
+    >
+      {/* LOGO — "MediSwift" with colored Medi, no box */}
       <Link
         to="/"
-        className="text-2xl font-extrabold tracking-tight"
-        style={{ fontFamily: "'Georgia', serif" }}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          textDecoration: "none",
+          fontFamily: "'Segoe UI', sans-serif",
+          fontSize: "1.5rem",
+          fontWeight: "800",
+          letterSpacing: "-0.5px",
+        }}
       >
-        <span className="border-2 border-blue-600 text-blue-600 px-2 py-0.5 rounded-md mr-0.5">
-          Medi
-        </span>
-        <span className="text-gray-800">Swift</span>
+        <span style={{ color: "#2563EB" }}>Medi</span>
+        <span style={{ color: "#1e293b" }}>Swift</span>
       </Link>
 
-      {/* NAVIGATION */}
-      <div className="flex items-center gap-8 font-medium text-gray-700">
-        {/* Always visible links */}
+      {/* RIGHT SIDE NAV */}
+      <div style={{ display: "flex", alignItems: "center", gap: "32px" }}>
+
+        {/* Always-visible links */}
         <Link
           to="/"
-          className="text-blue-600 font-semibold border-b-2 border-blue-600 pb-0.5 hover:text-blue-700 transition"
+          style={{
+            color: "#2563EB",
+            fontWeight: "600",
+            textDecoration: "none",
+            fontSize: "0.95rem",
+            borderBottom: "2px solid #2563EB",
+            paddingBottom: "2px",
+          }}
         >
           Home
         </Link>
-        <Link to="/medicines" className="hover:text-blue-600 transition">
+
+        <Link
+          to="/medicines"
+          style={{
+            color: "#374151",
+            fontWeight: "500",
+            textDecoration: "none",
+            fontSize: "0.95rem",
+          }}
+        >
           Medicines
         </Link>
 
@@ -227,7 +107,15 @@ const Navbar = () => {
             {user.role === "admin" ? (
               <Link
                 to="/admin-dashboard"
-                className="flex items-center gap-2 text-blue-600 font-bold hover:text-blue-700"
+                style={{
+                  color: "#2563EB",
+                  fontWeight: "700",
+                  textDecoration: "none",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  fontSize: "0.95rem",
+                }}
               >
                 <FaChartLine /> Admin Dashboard
               </Link>
@@ -235,47 +123,125 @@ const Navbar = () => {
               <>
                 <Link
                   to="/cart"
-                  className="relative hover:text-blue-600 transition flex items-center gap-1"
+                  style={{
+                    color: "#374151",
+                    textDecoration: "none",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    position: "relative",
+                    fontWeight: "500",
+                    fontSize: "0.95rem",
+                  }}
                 >
                   <FaShoppingCart /> Cart
                   {cartCount > 0 && (
-                    <span className="absolute -top-2 -right-3 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border border-white">
+                    <span
+                      style={{
+                        position: "absolute",
+                        top: "-8px",
+                        right: "-12px",
+                        backgroundColor: "#EF4444",
+                        color: "white",
+                        fontSize: "10px",
+                        width: "16px",
+                        height: "16px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderRadius: "50%",
+                        border: "1px solid white",
+                      }}
+                    >
                       {cartCount}
                     </span>
                   )}
                 </Link>
-                <Link to="/my-orders" className="hover:text-blue-600 transition">
+                <Link
+                  to="/my-orders"
+                  style={{
+                    color: "#374151",
+                    textDecoration: "none",
+                    fontWeight: "500",
+                    fontSize: "0.95rem",
+                  }}
+                >
                   My Orders
                 </Link>
               </>
             )}
 
-            <div className="h-6 w-[1px] bg-gray-300 mx-1"></div>
+            <div
+              style={{
+                height: "24px",
+                width: "1px",
+                backgroundColor: "#CBD5E1",
+              }}
+            />
 
-            {/* Profile & Logout */}
-            <span className="flex items-center gap-2 bg-white text-blue-700 px-4 py-1.5 rounded-full text-sm font-semibold border border-blue-200">
-              <FaUser className="text-xs" />
+            <span
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                backgroundColor: "#ffffff",
+                color: "#1d4ed8",
+                border: "1px solid #BFDBFE",
+                padding: "5px 14px",
+                borderRadius: "999px",
+                fontSize: "0.85rem",
+                fontWeight: "600",
+              }}
+            >
+              <FaUser style={{ fontSize: "11px" }} />
               {user.name} {user.role === "admin" && "(Admin)"}
             </span>
+
             <button
               onClick={handleLogout}
-              className="bg-red-500 text-white px-4 py-1.5 rounded-lg hover:bg-red-600 transition text-sm shadow-sm"
+              style={{
+                backgroundColor: "#EF4444",
+                color: "#ffffff",
+                padding: "7px 18px",
+                borderRadius: "8px",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "0.875rem",
+                fontWeight: "600",
+              }}
             >
               Logout
             </button>
           </>
         ) : (
-          /* GUEST: Login + Register styled like reference image */
+          /* GUEST STATE — matches reference exactly */
           <>
             <Link
               to="/login"
-              className="border border-blue-600 text-blue-600 px-6 py-2 rounded-md font-semibold hover:bg-blue-50 transition text-sm"
+              style={{
+                border: "1.5px solid #2563EB",
+                color: "#2563EB",
+                padding: "7px 24px",
+                borderRadius: "8px",
+                textDecoration: "none",
+                fontSize: "0.9rem",
+                fontWeight: "600",
+                backgroundColor: "transparent",
+              }}
             >
               Login
             </Link>
             <Link
               to="/register"
-              className="bg-blue-600 text-white px-6 py-2 rounded-md font-semibold hover:bg-blue-700 transition text-sm shadow-sm"
+              style={{
+                backgroundColor: "#2563EB",
+                color: "#ffffff",
+                padding: "7px 24px",
+                borderRadius: "8px",
+                textDecoration: "none",
+                fontSize: "0.9rem",
+                fontWeight: "600",
+              }}
             >
               Register
             </Link>
