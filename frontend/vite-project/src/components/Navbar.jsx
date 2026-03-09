@@ -39,7 +39,7 @@ const Navbar = () => {
 
     fetchCartCount();
 
-    const interval = setInterval(fetchCartCount, 2000);
+    const interval = fetchCartCount;
     return () => clearInterval(interval);
   }, [user]);
 
