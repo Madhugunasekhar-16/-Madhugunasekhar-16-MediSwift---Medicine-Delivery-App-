@@ -8,9 +8,9 @@ const Home = () => {
 
         <div>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
-            Order Medicines <span className="text-orange-500">Fast</span> &
+            Order Medicines <span className="text-blue-500">Fast</span> &
             <br />
-            Get Them Delivered <span className="text-orange-500">Safely</span>
+            Get Them Delivered <span className="text-blue-500">Safely</span>
           </h1>
 
           <p className="text-gray-600 mt-6 text-lg">
@@ -22,14 +22,14 @@ const Home = () => {
           <div className="flex gap-4 mt-6">
             <Link
               to="/medicines"
-              className="bg-orange-500 text-white px-6 py-3 rounded-full hover:bg-orange-600 transition"
+              className="bg-light blue-500 text-white px-6 py-3 rounded-full hover:bg-light blue-600 transition"
             >
               Browse Medicines
             </Link>
 
             <Link
               to="/login"
-              className="border border-orange-500 text-orange-500 px-6 py-3 rounded-full hover:bg-orange-100 transition"
+              className="border border-light blue-500 text-light blue-500 px-6 py-3 rounded-full hover:bg-light blue-100 transition"
             >
               Login
             </Link>
@@ -37,17 +37,17 @@ const Home = () => {
 
           <div className="flex gap-10 mt-10">
             <div>
-              <h2 className="text-2xl font-bold text-orange-500">500+</h2>
+              <h2 className="text-2xl font-bold text-light blue-500">500+</h2>
               <p className="text-gray-600">Medicines</p>
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-orange-500">10k+</h2>
+              <h2 className="text-2xl font-bold text-light blue-500">10k+</h2>
               <p className="text-gray-600">Customers</p>
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-orange-500">24/7</h2>
+              <h2 className="text-2xl font-bold text-light blue-500">24/7</h2>
               <p className="text-gray-600">Support</p>
             </div>
           </div>
