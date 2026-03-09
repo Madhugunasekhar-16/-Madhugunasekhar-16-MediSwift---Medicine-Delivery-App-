@@ -4,8 +4,10 @@ const Home = () => {
   return (
     <div className="bg-[#f3e9e2] min-h-screen px-6 py-12">
 
+      {/* HERO SECTION */}
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 
+        {/* LEFT SIDE */}
         <div>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight">
             Order Medicines <span className="text-blue-500">Fast</span> &
@@ -19,40 +21,47 @@ const Home = () => {
             them at your doorstep quickly.
           </p>
 
+          {/* BUTTONS */}
           <div className="flex gap-4 mt-6">
+
             <Link
               to="/medicines"
-              className="bg-light blue-500 text-white px-6 py-3 rounded-full hover:bg-light blue-600 transition"
+              className="bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 transition"
             >
               Browse Medicines
             </Link>
 
             <Link
               to="/login"
-              className="border border-light blue-500 text-light blue-500 px-6 py-3 rounded-full hover:bg-light blue-100 transition"
+              className="border border-blue-500 text-blue-500 px-6 py-3 rounded-full hover:bg-blue-100 transition"
             >
               Login
             </Link>
+
           </div>
 
+          {/* STATS */}
           <div className="flex gap-10 mt-10">
+
             <div>
-              <h2 className="text-2xl font-bold text-light blue-500">500+</h2>
+              <h2 className="text-2xl font-bold text-blue-500">500+</h2>
               <p className="text-gray-600">Medicines</p>
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-light blue-500">10k+</h2>
+              <h2 className="text-2xl font-bold text-blue-500">10k+</h2>
               <p className="text-gray-600">Customers</p>
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-light blue-500">24/7</h2>
+              <h2 className="text-2xl font-bold text-blue-500">24/7</h2>
               <p className="text-gray-600">Support</p>
             </div>
+
           </div>
         </div>
 
+        {/* RIGHT IMAGE */}
         <div>
           <img
             src="https://images.unsplash.com/photo-1580281658629-1c6d0c4d7f5b"
@@ -63,6 +72,7 @@ const Home = () => {
 
       </div>
 
+      {/* FEATURES SECTION */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 max-w-6xl mx-auto">
 
         <div className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition text-center">
