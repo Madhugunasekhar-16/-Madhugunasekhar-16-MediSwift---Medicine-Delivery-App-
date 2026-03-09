@@ -1,7 +1,6 @@
 import { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-
+import { FaEye, FaEyeSlash, FaEnvelope, FaLock } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
@@ -10,16 +9,13 @@ const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setError("");
     setMessage("");
     setLoading(true);
@@ -27,9 +23,7 @@ const Login = () => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
@@ -41,17 +35,15 @@ const Login = () => {
       }
 
       login(data.user, data.token);
-
       setMessage("Login successful");
 
       setTimeout(() => {
         if (data.user.role === "admin") {
-          navigate("/admin/dashboard");
+          navigate("/admin-dashboard");
         } else {
           navigate("/");
         }
       }, 800);
-
     } catch (error) {
       console.error("Login error:", error);
       setError("Something went wrong. Please try again.");
@@ -61,84 +53,73 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-6">
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-100 via-white to-blue-50 flex items-center justify-center px-6 relative overflow-hidden font-sans">
+      
+      {/* Background Blobs */}
+      <div className="absolute top-20 left-20 w-80 h-80 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+      <div className="absolute bottom-20 right-20 w-80 h-80 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-700"></div>
 
-        <h2 className="text-2xl font-bold text-center mb-6 text-blue-700">
-          Login to MediSwift
-        </h2>
-
+      {/* THE GLASS CARD */}
+      <div className="relative z-10 w-full max-w-md bg-white/70 backdrop-blur-xl border border-white/40 p-10 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
         
-        {message && (
-          <div className="bg-green-100 text-green-700 text-center mb-4 px-4 py-2 rounded-lg">
-            {message}
+        <div className="text-center mb-10">
+          <div className="inline-block bg-blue-600 text-white p-3 rounded-2xl mb-4 shadow-lg shadow-blue-200">
+            <span className="font-bold text-xl">MS</span>
           </div>
-        )}
+          <h2 className="text-3xl font-extrabold text-gray-900">Welcome Back</h2>
+          <p className="text-gray-500 mt-2">Login to access your healthcare portal</p>
+        </div>
 
-        
-        {error && (
-          <div className="bg-red-100 text-red-700 text-center mb-4 px-4 py-2 rounded-lg">
-            {error}
-          </div>
-        )}
+        {/* Feedback Messages */}
+        {message && <div className="bg-green-100 text-green-700 text-sm text-center mb-4 py-2 rounded-xl">{message}</div>}
+        {error && <div className="bg-red-100 text-red-700 text-sm text-center mb-4 py-2 rounded-xl">{error}</div>}
 
         <form onSubmit={handleSubmit} className="space-y-5">
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
-            <input
-              type="email"
-              placeholder="Enter your email"
+          {/* Email Field */}
+          <div className="relative">
+            <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input 
+              type="email" 
+              placeholder="Email Address" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full pl-12 pr-4 py-4 bg-white/50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all"
             />
           </div>
 
-          <div>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full border p-2 pr-10 rounded"
-              />
-
-              <span
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-3 cursor-pointer text-gray-500"
-              >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </span>
-            </div>
+          {/* Password Field */}
+          <div className="relative">
+            <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input 
+              type={showPassword ? "text" : "password"} 
+              placeholder="Password" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full pl-12 pr-12 py-4 bg-white/50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all"
+            />
+            <button 
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-600"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
           </div>
 
-          <button
+          <button 
             type="submit"
             disabled={loading}
-            className={`w-full py-2 rounded-lg text-white ${
-              loading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700"
-            }`}
+            className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 hover:scale-[1.02] active:scale-95 disabled:bg-gray-400 disabled:scale-100 transition-all"
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "Logging in..." : "Login to MediSwift"}
           </button>
-
         </form>
 
-        <p className="text-center text-sm mt-4 text-gray-600">
-          Don’t have an account?{" "}
-          <Link
-            to="/register"
-            className="text-blue-600 font-medium hover:underline"
-          >
-            Sign up
-          </Link>
+        <p className="text-center text-gray-600 mt-8">
+          Don't have an account? <Link to="/register" className="text-blue-600 font-bold hover:underline">Sign up</Link>
         </p>
-
       </div>
     </div>
   );
