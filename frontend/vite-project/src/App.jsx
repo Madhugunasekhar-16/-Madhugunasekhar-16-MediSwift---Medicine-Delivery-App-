@@ -8,6 +8,7 @@ import Medicines from "./pages/Medicines";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/CheckOut";
 import MyOrders from "./pages/MyOrders";
+import Profile from "./pages/Profile";
 
 import AdminOrders from "./pages/AdminOrders";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -15,17 +16,13 @@ import AdminMedicines from "./pages/AdminMedicines";
 import EditMedicine from "./pages/EditMedicines";
 import AddMedicine from "./pages/AddMedicines";
 import AdminUsers from "./pages/AdminUsers";
-import Profile from "./pages/Profile";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 import AdminLayout from "./components/AdminLayout";
-
 import UserLayout from "./layouts/UserLayout";
 
 import { AuthContext } from "./context/AuthContext";
-
-
 
 function App() {
   const { user, logout } = useContext(AuthContext);
@@ -51,37 +48,21 @@ function App() {
   return (
     <Routes>
 
-      {/* Default Route */}
-      <Route
-        path="/"
-        element={
-          user ? <Navigate to="/home" replace /> : <Navigate to="/login" replace />
-        }
-      />
+      {/* LANDING PAGE */}
+      <Route path="/" element={<Home />} />
 
       {/* AUTH ROUTES */}
       <Route
         path="/login"
-        element={user ? <Navigate to="/home" replace /> : <Login />}
+        element={user ? <Navigate to="/medicines" replace /> : <Login />}
       />
 
       <Route
         path="/register"
-        element={user ? <Navigate to="/home" replace /> : <Register />}
+        element={user ? <Navigate to="/medicines" replace /> : <Register />}
       />
 
       {/* USER ROUTES */}
-      <Route
-        path="/home"
-        element={
-          <ProtectedRoute>
-            <UserLayout>
-              <Home />
-            </UserLayout>
-          </ProtectedRoute>
-        }
-      />
-
       <Route
         path="/medicines"
         element={
