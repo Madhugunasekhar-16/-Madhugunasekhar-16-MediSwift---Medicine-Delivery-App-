@@ -11,7 +11,7 @@ const addMedicine = async (req,res) => {
             stock,
             prescriptionRequired,
             expiryDate,
-            image 
+            image: req.file ? req.file.path : "" 
         });
 
         res.status(201).json({

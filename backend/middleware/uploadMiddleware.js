@@ -1,11 +1,18 @@
 const multer = require("multer");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("../config/cloudinary");
 
-const storage = multer.memoryStorage();
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "mediswift",
+    allowed_formats: ["jpg", "png", "jpeg"],
+  },
+});
 
 const upload = multer({
-    storage,
-    limits : { fileSize : 5 * 1024 * 1024},
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 },
 });
 
 module.exports = upload;
-
