@@ -11,11 +11,11 @@ const AboutPage = () => {
             {/* Left: Image with Blue Decorative Element */}
             <div className="relative">
               <div className="absolute -inset-4 bg-blue-100/50 rounded-[2.5rem] -rotate-2"></div>
-              <img 
-                src="/doctor-image.png" 
-                alt="Medical Professional" 
-                className="relative rounded-[2rem] shadow-2xl w-full object-cover aspect-[4/3]"
-              />
+                <img 
+                    src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80" 
+                    alt="Medical Professional" 
+                    className="relative rounded-[2rem] shadow-2xl w-full object-cover aspect-[4/3]"
+                />
             </div>
 
             {/* Right: Content */}
