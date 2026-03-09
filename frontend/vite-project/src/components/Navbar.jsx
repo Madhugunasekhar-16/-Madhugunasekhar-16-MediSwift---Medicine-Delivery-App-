@@ -1,12 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import { FaUser, FaShoppingCart, FaChartLine } from "react-icons/fa";
+import { FaUser, FaShoppingCart, FaChartLine, FaBars, FaTimes } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const [cartCount, setCartCount] = useState(0);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // State for mobile menu
 
   useEffect(() => {
     const fetchCartCount = async () => {
@@ -33,47 +34,56 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
+    setIsMenuOpen(false);
     navigate("/login");
   };
 
-  // Reusable Tailwind class for links with the blue rounded-box hover
   const navLinkClasses = "no-underline text-gray-700 font-medium text-[0.95rem] px-4 py-2 rounded-xl transition-all duration-200 hover:bg-blue-600 hover:text-white flex items-center gap-2";
+  
+  // Mobile specific class for full-width links
+  const mobileLinkClasses = "no-underline text-gray-700 font-bold text-lg py-4 border-b border-gray-100 flex items-center gap-3";
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-[#EEF4FF] border-b border-[#C7D9F8] px-12 py-3.5 flex justify-between items-center box-border">
+    <nav className="sticky top-0 z-[100] w-full bg-[#EEF4FF] border-b border-[#C7D9F8] px-4 md:px-12 py-3 flex justify-between items-center box-border">
       
       {/* LOGO */}
-      <Link to="/" className="no-underline flex items-center font-sans text-2xl font-extrabold tracking-tight">
+      <Link to="/" className="no-underline flex items-center font-sans text-xl md:text-2xl font-extrabold tracking-tight z-[101]">
         <span className="text-blue-600">Medi</span>
         <span className="text-slate-800">Swift</span>
       </Link>
 
-      {/* RIGHT SIDE NAV */}
-      <div className="flex items-center gap-2">
-        
-        {/* Home Link - Removed the blue underline style */}
-        <Link to="/" className={navLinkClasses}>
-          Home
-        </Link>
+      {/* MOBILE ACTIONS (Shown only on small screens) */}
+      <div className="flex items-center gap-3 md:hidden z-[101]">
+        {user && user.role !== "admin" && (
+          <Link to="/cart" className="relative text-blue-600 text-xl p-2">
+            <FaShoppingCart />
+            {cartCount > 0 && (
+              <span className="absolute top-0 right-0 bg-red-500 text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full">
+                {cartCount}
+              </span>
+            )}
+          </Link>
+        )}
+        <button 
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="text-2xl text-slate-800 p-2 focus:outline-none"
+        >
+          {isMenuOpen ? <FaTimes /> : <FaBars />}
+        </button>
+      </div>
 
-        {/* Medicines and Cart now use the navLinkClasses for the hover box effect */}
-        <Link to="/medicines" className={navLinkClasses}>
-          Medicines
-        </Link>
-
-        <Link to="/about" className={navLinkClasses}>
-          About Us
-        </Link>
-
-        <Link to="/contact" className={navLinkClasses}>
-          Contact
-        </Link>
+      {/* DESKTOP NAV LINKS (Hidden on Mobile) */}
+      <div className="hidden md:flex items-center gap-1">
+        <Link to="/" className={navLinkClasses}>Home</Link>
+        <Link to="/medicines" className={navLinkClasses}>Medicines</Link>
+        <Link to="/about" className={navLinkClasses}>About Us</Link>
+        <Link to="/contact" className={navLinkClasses}>Contact</Link>
 
         {user ? (
-          <>
+          <div className="flex items-center ml-2">
             {user.role === "admin" ? (
-              <Link to="/admin-dashboard" className={`${navLinkClasses} text-blue-600 font-bold`}>
-                <FaChartLine /> Admin Dashboard
+              <Link to="/admin/dashboard" className={`${navLinkClasses} text-blue-600 font-bold`}>
+                <FaChartLine /> Admin
               </Link>
             ) : (
               <>
@@ -85,47 +95,73 @@ const Navbar = () => {
                     </span>
                   )}
                 </Link>
-                <Link to="/my-orders" className={navLinkClasses}>
-                  My Orders
-                </Link>
+                <Link to="/my-orders" className={navLinkClasses}>My Orders</Link>
               </>
             )}
 
-            {/* Separator */}
             <div className="h-6 w-[1px] bg-slate-300 mx-3" />
 
-            {/* Profile Button - Changed from <span> to <Link> to make it work */}
             <Link 
               to="/profile" 
-              className="no-underline flex items-center gap-2 bg-white text-blue-700 border border-blue-200 px-4 py-1.5 rounded-full text-[0.85rem] font-semibold mr-2 transition-all hover:bg-blue-50 hover:border-blue-300"
+              className="no-underline flex items-center gap-2 bg-white text-blue-700 border border-blue-200 px-4 py-1.5 rounded-full text-[0.85rem] font-semibold transition-all hover:bg-blue-50"
             >
               <FaUser className="text-[11px]" />
-              {user.name} {user.role === "admin" && "(Admin)"}
+              {user.name.split(' ')[0]} {/* Show only first name to save space */}
             </Link>
 
             <button
               onClick={handleLogout}
-              className="bg-red-500 text-white px-5 py-2 rounded-lg border-none cursor-pointer text-[0.875rem] font-semibold hover:bg-red-600 transition-colors shadow-sm"
+              className="ml-3 bg-red-500 text-white px-4 py-2 rounded-lg text-[0.85rem] font-semibold hover:bg-red-600 transition-all shadow-sm"
             >
               Logout
             </button>
-          </>
+          </div>
         ) : (
-          <div className="flex items-center gap-4 ml-2">
-            <Link
-              to="/login"
-              className="no-underline border-[1.5px] border-blue-600 text-blue-600 px-6 py-2 rounded-lg text-[0.9rem] font-semibold hover:bg-blue-50 transition-all"
-            >
+          <div className="flex items-center gap-3 ml-4">
+            <Link to="/login" className="no-underline border-[1.5px] border-blue-600 text-blue-600 px-5 py-1.5 rounded-lg font-semibold hover:bg-blue-50 transition-all">
               Login
             </Link>
-            <Link
-              to="/register"
-              className="no-underline bg-blue-600 text-white px-6 py-2 rounded-lg text-[0.9rem] font-semibold hover:bg-blue-700 shadow-md transition-all"
-            >
+            <Link to="/register" className="no-underline bg-blue-600 text-white px-5 py-1.5 rounded-lg font-semibold hover:bg-blue-700 shadow-md transition-all">
               Register
             </Link>
           </div>
         )}
+      </div>
+
+      {/* MOBILE MENU OVERLAY (Animated Slide-down) */}
+      <div className={`fixed inset-0 bg-white z-[100] transition-transform duration-300 ease-in-out transform ${isMenuOpen ? "translate-y-0" : "-translate-y-full"} md:hidden pt-20 px-6`}>
+        <div className="flex flex-col">
+          <Link to="/" onClick={() => setIsMenuOpen(false)} className={mobileLinkClasses}>Home</Link>
+          <Link to="/medicines" onClick={() => setIsOpen(false)} className={mobileLinkClasses}>Medicines</Link>
+          <Link to="/about" onClick={() => setIsMenuOpen(false)} className={mobileLinkClasses}>About Us</Link>
+          <Link to="/contact" onClick={() => setIsMenuOpen(false)} className={mobileLinkClasses}>Contact</Link>
+          
+          {user ? (
+            <div className="mt-4 space-y-4">
+              <Link to="/profile" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3 text-blue-600 font-bold text-lg">
+                <FaUser /> {user.name} Profile
+              </Link>
+              {user.role === "admin" ? (
+                <Link to="/admin/dashboard" onClick={() => setIsMenuOpen(false)} className={mobileLinkClasses}>
+                  <FaChartLine /> Admin Dashboard
+                </Link>
+              ) : (
+                <Link to="/my-orders" onClick={() => setIsMenuOpen(false)} className={mobileLinkClasses}>My Orders</Link>
+              )}
+              <button 
+                onClick={handleLogout}
+                className="w-full bg-red-500 text-white py-4 rounded-xl font-bold text-lg mt-4 shadow-lg"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <div className="mt-8 flex flex-col gap-4">
+              <Link to="/login" onClick={() => setIsMenuOpen(false)} className="w-full text-center py-4 border-2 border-blue-600 text-blue-600 rounded-xl font-bold">Login</Link>
+              <Link to="/register" onClick={() => setIsMenuOpen(false)} className="w-full text-center py-4 bg-blue-600 text-white rounded-xl font-bold shadow-blue-200 shadow-xl">Register</Link>
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   );
