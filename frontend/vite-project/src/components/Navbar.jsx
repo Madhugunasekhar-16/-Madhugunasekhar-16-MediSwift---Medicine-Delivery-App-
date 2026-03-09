@@ -164,10 +164,14 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [cartCount, setCartCount] = useState(0);
 
+  // FETCH CART LOGIC
   useEffect(() => {
     const fetchCartCount = async () => {
-      // Only fetch cart if the user is a regular customer (not an admin)
-      if (!user || user.role === "admin") return;
+      // FIX: Only fetch if user exists and is NOT an admin
+      if (!user || user.role === "admin") {
+        setCartCount(0);
+        return;
+      }
 
       try {
         const token = localStorage.getItem("token");
@@ -202,25 +206,24 @@ const Navbar = () => {
         MediSwift
       </Link>
 
-      {/* DYNAMIC MENU */}
+      {/* DYNAMIC NAVIGATION LINKS */}
       <div className="flex items-center gap-8 font-medium text-gray-600">
         <Link to="/" className="hover:text-blue-600 transition">Home</Link>
         <Link to="/medicines" className="hover:text-blue-600 transition">Medicines</Link>
 
+        {/* CONDITION 1: LOGGED IN USER */}
         {user ? (
           <>
-            {/* ADMIN-SPECIFIC LINKS */}
+            {/* ADMIN ONLY */}
             {user.role === "admin" ? (
               <Link to="/admin-dashboard" className="flex items-center gap-2 text-blue-600 font-bold hover:text-blue-700">
-                <FaChartLine />
-                Admin Dashboard
+                <FaChartLine /> Admin Dashboard
               </Link>
             ) : (
-              /* CUSTOMER-SPECIFIC LINKS */
+              /* CUSTOMER ONLY */
               <>
                 <Link to="/cart" className="relative hover:text-blue-600 transition flex items-center gap-1">
-                  <FaShoppingCart />
-                  Cart
+                  <FaShoppingCart /> Cart
                   {cartCount > 0 && (
                     <span className="absolute -top-2 -right-3 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border border-white">
                       {cartCount}
@@ -233,17 +236,20 @@ const Navbar = () => {
 
             <div className="h-6 w-[1px] bg-gray-200 mx-2"></div>
             
-            {/* COMMON USER SECTION */}
+            {/* PROFILE INFO & LOGOUT (Common for User & Admin) */}
             <span className="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-1.5 rounded-full text-sm font-semibold">
               <FaUser className="text-xs" />
               {user.name} {user.role === "admin" && "(Admin)"}
             </span>
-            <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-1.5 rounded-lg hover:bg-red-600 transition text-sm">
+            <button 
+              onClick={handleLogout} 
+              className="bg-red-500 text-white px-4 py-1.5 rounded-lg hover:bg-red-600 transition text-sm shadow-md"
+            >
               Logout
             </button>
           </>
         ) : (
-          /* GUEST LINKS */
+          /* CONDITION 2: GUEST (NOT LOGGED IN) */
           <>
             <Link to="/login" className="border border-blue-600 text-blue-600 px-5 py-2 rounded-full hover:bg-blue-50 transition">
               Login
