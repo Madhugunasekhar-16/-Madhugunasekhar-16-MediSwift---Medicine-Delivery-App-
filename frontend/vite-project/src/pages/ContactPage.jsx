@@ -58,7 +58,7 @@ const ContactPage = () => {
               </div>
               <div>
                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Visit Us</p>
-                <p className="text-slate-700 font-semibold">123 Health Avenue, Medical District</p>
+                <p className="text-slate-700 font-semibold">12563 Health Avenue Road, Medical District</p>
               </div>
             </div>
           </div>

@@ -12,7 +12,7 @@ const AboutPage = () => {
             <div className="relative">
               <div className="absolute -inset-4 bg-blue-100/50 rounded-[2.5rem] -rotate-2"></div>
                 <img 
-                    src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80" 
+                    src="https://plus.unsplash.com/premium_photo-1682129892808-3476952259c7?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
                     alt="Medical Professional" 
                     className="relative rounded-[2rem] shadow-2xl w-full object-cover aspect-[4/3]"
                 />
@@ -49,7 +49,7 @@ const AboutPage = () => {
                 </div>
                 <div className="text-center">
                   <div className="text-blue-600 text-3xl font-black mb-1 flex justify-center items-center gap-1">
-                    5<FaStar className="text-xl" />
+                    4.5<FaStar className="text-xl" />
                   </div>
                   <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Rating</p>
                 </div>
