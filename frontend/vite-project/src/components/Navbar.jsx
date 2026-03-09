@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+/* import { Link, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
 
@@ -54,7 +54,7 @@ const Navbar = () => {
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-md px-8 py-4 flex justify-between items-center">
 
-      {/* LOGO */}
+
       <Link
         to="/"
         className="text-2xl font-bold text-orange-500 tracking-wide hover:scale-105 transition"
@@ -62,7 +62,7 @@ const Navbar = () => {
         MediSwift
       </Link>
 
-      {/* RIGHT SIDE MENU */}
+   
       <div className="flex items-center gap-6 font-medium text-gray-700">
 
         <Link to="/" className="hover:text-orange-500 transition">
@@ -75,7 +75,7 @@ const Navbar = () => {
 
         {user && (
           <>
-            {/* CART */}
+           
             <Link
               to="/cart"
               className="relative hover:text-orange-500 transition"
@@ -99,7 +99,7 @@ const Navbar = () => {
           </>
         )}
 
-        {/* ADMIN LINK */}
+      
         {user?.role === "admin" && (
           <Link
             to="/admin/dashboard"
@@ -109,7 +109,7 @@ const Navbar = () => {
           </Link>
         )}
 
-        {/* AUTH BUTTONS */}
+      
         {!user ? (
           <>
             <Link
@@ -128,7 +128,7 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            {/* PROFILE */}
+         
             <Link
               to="/profile"
               className="flex items-center gap-2 bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm font-semibold hover:bg-orange-200 transition"
@@ -137,13 +137,120 @@ const Navbar = () => {
               {user.name}
             </Link>
 
-            {/* LOGOUT */}
+          
             <button
               onClick={handleLogout}
               className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
             >
               Logout
             </button>
+          </>
+        )}
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar; */
+
+
+import { Link, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { FaUser, FaShoppingCart, FaChartLine } from "react-icons/fa";
+import { AuthContext } from "../context/AuthContext";
+
+const Navbar = () => {
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      // Only fetch cart if the user is a regular customer (not an admin)
+      if (!user || user.role === "admin") return;
+
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/cart`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await response.json();
+        if (response.ok && data.items) {
+          const totalItems = data.items.reduce((sum, item) => sum + item.quantity, 0);
+          setCartCount(totalItems);
+        }
+      } catch (error) {
+        console.error("Error fetching cart count", error);
+      }
+    };
+
+    fetchCartCount();
+  }, [user]);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
+  return (
+    <nav className="sticky top-0 z-50 bg-white shadow-sm px-8 py-4 flex justify-between items-center border-b border-gray-100">
+      {/* LOGO */}
+      <Link to="/" className="text-2xl font-bold text-blue-600 tracking-tight flex items-center gap-2">
+        <div className="bg-blue-600 text-white p-1 rounded-lg">
+          <span className="text-sm">MS</span>
+        </div>
+        MediSwift
+      </Link>
+
+      {/* DYNAMIC MENU */}
+      <div className="flex items-center gap-8 font-medium text-gray-600">
+        <Link to="/" className="hover:text-blue-600 transition">Home</Link>
+        <Link to="/medicines" className="hover:text-blue-600 transition">Medicines</Link>
+
+        {user ? (
+          <>
+            {/* ADMIN-SPECIFIC LINKS */}
+            {user.role === "admin" ? (
+              <Link to="/admin-dashboard" className="flex items-center gap-2 text-blue-600 font-bold hover:text-blue-700">
+                <FaChartLine />
+                Admin Dashboard
+              </Link>
+            ) : (
+              /* CUSTOMER-SPECIFIC LINKS */
+              <>
+                <Link to="/cart" className="relative hover:text-blue-600 transition flex items-center gap-1">
+                  <FaShoppingCart />
+                  Cart
+                  {cartCount > 0 && (
+                    <span className="absolute -top-2 -right-3 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border border-white">
+                      {cartCount}
+                    </span>
+                  )}
+                </Link>
+                <Link to="/my-orders" className="hover:text-blue-600 transition">My Orders</Link>
+              </>
+            )}
+
+            <div className="h-6 w-[1px] bg-gray-200 mx-2"></div>
+            
+            {/* COMMON USER SECTION */}
+            <span className="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-1.5 rounded-full text-sm font-semibold">
+              <FaUser className="text-xs" />
+              {user.name} {user.role === "admin" && "(Admin)"}
+            </span>
+            <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-1.5 rounded-lg hover:bg-red-600 transition text-sm">
+              Logout
+            </button>
+          </>
+        ) : (
+          /* GUEST LINKS */
+          <>
+            <Link to="/login" className="border border-blue-600 text-blue-600 px-5 py-2 rounded-full hover:bg-blue-50 transition">
+              Login
+            </Link>
+            <Link to="/register" className="bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700 shadow-md shadow-blue-200 transition">
+              Register
+            </Link>
           </>
         )}
       </div>
