@@ -87,11 +87,21 @@ const AddMedicine = () => {
           Prescription Required
         </label>
 
-        <div className="border-2 border-dashed rounded-lg p-4 text-center cursor-pointer">
-          <input type="file" accept="image/*" onChange={handleImageChange} />
+       
+        <div className="border-2 border-dashed rounded-lg p-4 text-center">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files[0];
+              setImage(file);
+              setPreview(URL.createObjectURL(file));
+            }}
+          />
           <p className="text-sm text-gray-400 mt-1">JPG, PNG up to 5MB</p>
         </div>
 
+      
         {preview && (
           <img src={preview} alt="preview"
             className="w-full h-48 object-cover rounded-lg border" />
