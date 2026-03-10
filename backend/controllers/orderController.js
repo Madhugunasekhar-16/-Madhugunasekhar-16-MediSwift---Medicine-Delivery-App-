@@ -1,12 +1,11 @@
 const Cart = require("../models/cartModel.js");
 const Order = require("../models/orderModel.js");
-const Medicine = require("../models/medicineModel.js");
-const { uploadToCloudinary } = require("../config/cloudinary.js");
+
+
 
 const placeOrder = async (req, res) => {
     try {
         const userId = req.user.id;
-
         const cart = await Cart.findOne({ user: userId }).populate("items.medicine");
 
         if (!cart || cart.items.length === 0) {
@@ -18,48 +17,25 @@ const placeOrder = async (req, res) => {
 
         for (let item of cart.items) {
             const medicine = item.medicine;
-
-            
-            if (!medicine || !medicine.name || medicine.price === undefined) {
-                return res.status(400).json({
-                    message: "One or more medicines in your cart no longer exist. Please update your cart.",
-                });
+            if (!medicine || !medicine.name) {
+                return res.status(400).json({ message: "One or more medicines no longer exist." });
             }
-
             if (medicine.stock < item.quantity) {
-                return res.status(400).json({
-                    message: `${medicine.name} is out of stock`,
-                });
+                return res.status(400).json({ message: `${medicine.name} is out of stock` });
             }
-
-            if (medicine.prescriptionRequired) {
-                prescriptionRequired = true;
-            }
-
+            if (medicine.prescriptionRequired) prescriptionRequired = true;
             totalAmount += medicine.price * item.quantity;
         }
 
         let prescriptionImageUrl = "";
-
         if (prescriptionRequired) {
             if (!req.file) {
-                return res.status(400).json({
-                    message: "Prescription image is required for one or more items in your cart",
-                });
+                return res.status(400).json({ message: "Prescription image is required" });
             }
-
-            const result = await uploadToCloudinary(req.file.buffer);
-            prescriptionImageUrl = result.secure_url;
+            
+            prescriptionImageUrl = req.file.path; 
         }
 
-       
-        for (let item of cart.items) {
-            const medicine = item.medicine;
-            medicine.stock -= item.quantity;
-            await medicine.save();
-        }
-
-        
         const newOrder = await Order.create({
             user: userId,
             items: cart.items.map((item) => ({
@@ -71,117 +47,59 @@ const placeOrder = async (req, res) => {
             prescriptionImage: prescriptionImageUrl,
         });
 
-        
+        for (let item of cart.items) {
+            item.medicine.stock -= item.quantity;
+            await item.medicine.save();
+        }
+
         cart.items = [];
         await cart.save();
 
-        res.status(201).json({
-            message: "Order placed successfully",
-            order: newOrder,
-        });
-
+        res.status(201).json({ message: "Order placed successfully", order: newOrder });
     } catch (error) {
         console.error("Place order error:", error);
         res.status(500).json({ message: "Server error" });
     }
 };
 
+
 const getMyOrders = async (req, res) => {
     try {
-        const userId = req.user.id;
-
-        const orders = await Order.find({ user: userId })
+        const orders = await Order.find({ user: req.user.id })
             .populate("items.medicine")
             .sort({ createdAt: -1 });
-
-        res.status(200).json({
-            count: orders.length,
-            orders,
-        });
-
+        res.status(200).json({ count: orders.length, orders });
     } catch (error) {
-        console.error("Get my orders error:", error);
-        res.status(500).json({ message: "Server error" });
+        res.status(500).json({ message: "Server error fetching orders" });
     }
 };
 
+
 const getAllOrders = async (req, res) => {
     try {
-
         const orders = await Order.find()
             .populate("user", "name email")
             .populate("items.medicine")
             .sort({ createdAt: -1 });
-
-        res.status(200).json({
-            count: orders.length,
-            orders,
-        });
-
+        res.status(200).json({ count: orders.length, orders });
     } catch (error) {
-        console.error("Get all orders error:", error);
-        res.status(500).json({ message: "Server error" });
+        res.status(500).json({ message: "Server error fetching all orders" });
     }
 };
+
 
 const updateOrderStatus = async (req, res) => {
     try {
         const { orderStatus } = req.body;
-
-        const allowedStatuses = [
-            "Pending",
-            "Approved",
-            "Rejected",
-            "Shipped",
-            "Delivered",
-        ];
-
-        if (!allowedStatuses.includes(orderStatus)) {
-            return res.status(400).json({
-                message: "Invalid order status value",
-            });
-        }
-
         const order = await Order.findById(req.params.id);
+        if (!order) return res.status(404).json({ message: "Order not found" });
 
-        if (!order) {
-            return res.status(404).json({
-                message: "Order not found",
-            });
-        }
-
-        const transitionRules = {
-            Pending: ["Approved", "Rejected"],
-            Approved: ["Shipped"],
-            Shipped: ["Delivered"],
-            Rejected: [],
-            Delivered: [],
-        };
-
-        const currentStatus = order.orderStatus;
-
-        if (!transitionRules[currentStatus].includes(orderStatus)) {
-            return res.status(400).json({
-                message: `Cannot change status from ${currentStatus} to ${orderStatus}`,
-            });
-        }
-
-        await Order.updateOne(
-            { _id: req.params.id },
-            { $set: { orderStatus } }
-        );
-
-        res.status(200).json({
-            message: "Order status updated",
-            order: { ...order.toObject(), orderStatus },
-        });
-
+        order.orderStatus = orderStatus;
+        await order.save();
+        res.status(200).json({ message: "Order status updated", order });
     } catch (error) {
-        console.error("Update order status error:", error);
-        res.status(500).json({ message: "Server error" });
+        res.status(500).json({ message: "Server error updating status" });
     }
 };
-
-
 
 module.exports = { placeOrder, getMyOrders, getAllOrders, updateOrderStatus };
