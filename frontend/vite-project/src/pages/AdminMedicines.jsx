@@ -56,7 +56,6 @@ const AdminMedicines = () => {
               <th className="p-5 font-bold">Product</th>
               <th className="p-5 font-bold">Price</th>
               <th className="p-5 font-bold">Stock</th>
-              <th className="p-5 font-bold">Status</th>
               <th className="p-5 font-bold text-center">Actions</th>
             </tr>
           </thead>
