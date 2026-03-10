@@ -6,7 +6,7 @@ const addtoCart = async (req,res) => {
         const { medicineId, quantity } = req.body;
         const qty = Number(quantity) || 1;
         
-        // medicine exists or not
+       
         const medicine = await Medicine.findById(medicineId);
         if(!medicine) {
             return res.status(404).json({
@@ -14,10 +14,10 @@ const addtoCart = async (req,res) => {
             });
         };
 
-        //finding user cart
+        
         let cart = await Cart.findOne({ user : req.user._id});
 
-        //if card doesnot exists create one 
+         
         if(!cart) {
             cart = await Cart.create({
                 user : req.user._id,
@@ -25,15 +25,15 @@ const addtoCart = async (req,res) => {
             });
         }
 
-        //checking medicine already in cart
+       
         const existingItem = cart.items.find(
             (item) => item.medicine.toString() === medicineId
         );
 
         if(existingItem) {
-            existingItem.quantity += qty || 1;     //if exists increase 1
+            existingItem.quantity += qty || 1;    
         } else {
-            cart.items.push({                           // if not add 1
+            cart.items.push({                           
                 medicine : medicineId,
                 quantity : qty,
             });

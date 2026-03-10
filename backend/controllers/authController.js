@@ -7,20 +7,20 @@ const registerUser = async (req,res) =>{
     try {
         const { name, email, password } = req.body;
 
-        const userExists = await User.findOne({ email });  //checking the user exists or not
+        const userExists = await User.findOne({ email });  
 
         if(userExists) {
             res.status(400)
             throw new Error("User already Exists");
         };
 
-        const salt = await bcrypt.genSalt(10);   //genSalt() ==== creates secret
-        const hashedPassword = await bcrypt.hash(password, salt);  //hash() ==== locks the password
+        const salt = await bcrypt.genSalt(10);   
+        const hashedPassword = await bcrypt.hash(password, salt);  
 
         const newUser = await User.create({
             name,
             email,
-            password : hashedPassword,   //user details stored in DB
+            password : hashedPassword,   
         });
 
         res.status(201).json({
@@ -39,14 +39,13 @@ const loginUser = async(req,res) => {
 
         const { email, password } = req.body;
 
-        const existingUser  = await User.findOne({ email });  //findng user using email
-
+        const existingUser  = await User.findOne({ email });  
         if(!existingUser ) {
-            res.status(401)  //checking user email exists or not 
+            res.status(401)  
             throw new Error("Invalid User or Password");
         }
 
-        const isPasswordMatch = await bcrypt.compare(password,existingUser.password);    //checking user password
+        const isPasswordMatch = await bcrypt.compare(password,existingUser.password);    
         if(!isPasswordMatch) {
             res.status(401)
             throw new Error("Invalid User or Password")    

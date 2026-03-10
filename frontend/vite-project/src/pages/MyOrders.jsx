@@ -56,7 +56,7 @@ const MyOrders = () => {
         My Orders
       </h2>
 
-      {/* GLOBAL API ERROR */}
+      
       {error && (
         <div className="bg-red-100 text-red-700 p-3 rounded mb-6 text-center">
           {error}

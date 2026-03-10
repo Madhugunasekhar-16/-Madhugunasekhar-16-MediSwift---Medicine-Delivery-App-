@@ -29,7 +29,7 @@ const AdminDashboard = () => {
 
         const token = localStorage.getItem("token");
 
-        // Fetch stats
+        
         const statsResponse = await fetch(
           `${import.meta.env.VITE_API_URL}/admin/stats`,
           {
@@ -48,7 +48,7 @@ const AdminDashboard = () => {
 
         setStats(statsData);
 
-        // Fetch orders
+      
         const ordersResponse = await fetch(
           `${import.meta.env.VITE_API_URL}/orders/admin`,
           {
@@ -96,14 +96,14 @@ const AdminDashboard = () => {
 
       <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
 
-      {/* Error Alert */}
+     
       {error && (
         <div className="bg-red-100 text-red-700 p-3 rounded mb-6 text-center">
           {error}
         </div>
       )}
 
-      {/* Dashboard Cards */}
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
         <div 
@@ -153,7 +153,7 @@ const AdminDashboard = () => {
 
       </div>
 
-      {/* Analytics Chart */}
+     
       <div className="bg-white p-6 rounded-lg shadow mt-10">
 
         <h2 className="text-xl font-semibold mb-4">
@@ -171,7 +171,7 @@ const AdminDashboard = () => {
 
       </div>
 
-      {/* Recent Orders */}
+      
       <div className="bg-white p-6 rounded-lg shadow mt-10">
 
         <h2 className="text-xl font-semibold mb-4">

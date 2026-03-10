@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           
-          {/* Column 1: Brand */}
+          
           <div className="space-y-4">
             <Link to="/" className="text-2xl font-black tracking-tight no-underline">
               <span className="text-blue-500">Medi</span>Swift
@@ -18,7 +18,7 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Column 2: Quick Links */}
+        
           <div>
             <h4 className="font-bold text-lg mb-6">Quick Links</h4>
             <ul className="space-y-3 p-0 list-none">
@@ -28,7 +28,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Column 3: Support */}
+         
           <div>
             <h4 className="font-bold text-lg mb-6">Support</h4>
             <ul className="space-y-3 p-0 list-none">
@@ -38,7 +38,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Column 4: Social Media */}
           <div>
             <h4 className="font-bold text-lg mb-6">Connect With Us</h4>
             <div className="flex gap-4">
@@ -55,7 +54,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
+      
         <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
           <p>© 2026 MediSwift. All rights reserved.</p>
           <div className="flex gap-6">

@@ -19,7 +19,7 @@ const placeOrder = async (req, res) => {
         for (let item of cart.items) {
             const medicine = item.medicine;
 
-            // If populate failed, medicine will be null or won't have a name/price
+            
             if (!medicine || !medicine.name || medicine.price === undefined) {
                 return res.status(400).json({
                     message: "One or more medicines in your cart no longer exist. Please update your cart.",
@@ -52,14 +52,14 @@ const placeOrder = async (req, res) => {
             prescriptionImageUrl = result.secure_url;
         }
 
-        // Deduct stock for each medicine
+       
         for (let item of cart.items) {
             const medicine = item.medicine;
             medicine.stock -= item.quantity;
             await medicine.save();
         }
 
-        // Create the order
+        
         const newOrder = await Order.create({
             user: userId,
             items: cart.items.map((item) => ({
@@ -71,7 +71,7 @@ const placeOrder = async (req, res) => {
             prescriptionImage: prescriptionImageUrl,
         });
 
-        // Clear the cart
+        
         cart.items = [];
         await cart.save();
 

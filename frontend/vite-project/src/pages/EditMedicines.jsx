@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { FaEdit, FaImage, FaSave } from "react-icons/fa";
 
 const EditMedicine = () => {
   const { id } = useParams();
@@ -8,9 +9,19 @@ const EditMedicine = () => {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [medicine, setMedicine] = useState({
-    name: "", description: "", price: "",
-    stock: "", prescriptionRequired: false, expiryDate: "",
+    name: "", 
+    description: "", 
+    price: "",
+    stock: "", 
+    category: "", 
+    prescriptionRequired: false, 
+    expiryDate: "",
   });
+
+  const categories = [
+    "Pain Relief", "Antibiotics", "Diabetes Care", 
+    "Heart Health", "Digestive Health", "Vitamins", "Personal Care"
+  ];
 
   useEffect(() => {
     const fetchMedicine = async () => {
@@ -21,13 +32,13 @@ const EditMedicine = () => {
         });
         const data = await res.json();
         if (res.ok) {
-          setMedicine(data);
-          setPreview(data.image || null); 
-        } else {
-          alert("Failed to fetch medicine");
+          
+          const medData = data.medicine || data; 
+          setMedicine(medData);
+          setPreview(medData.image || null); 
         }
       } catch (error) {
-        console.error("Fetch medicine error:", error);
+        console.error("Fetch error:", error);
       }
     };
     fetchMedicine();
@@ -40,8 +51,10 @@ const EditMedicine = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    setImage(file);
-    setPreview(URL.createObjectURL(file)); 
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file)); 
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -50,12 +63,14 @@ const EditMedicine = () => {
 
     try {
       const token = localStorage.getItem("token");
-
       const data = new FormData(); 
+      
+      
       data.append("name", medicine.name);
       data.append("description", medicine.description || "");
       data.append("price", medicine.price);
       data.append("stock", medicine.stock);
+      data.append("category", medicine.category || ""); 
       data.append("prescriptionRequired", medicine.prescriptionRequired);
       data.append("expiryDate", medicine.expiryDate || "");
       if (image) data.append("image", image);
@@ -66,16 +81,14 @@ const EditMedicine = () => {
         body: data,
       });
 
-      const result = await response.json();
-
       if (response.ok) {
-        alert("Medicine updated successfully");
+        alert("Medicine updated successfully!");
         navigate("/admin/medicines");
       } else {
-        alert(result.message || "Failed to update medicine");
+        const result = await response.json();
+        alert(result.message || "Update failed");
       }
     } catch (error) {
-      console.error("Update error:", error);
       alert("Something went wrong");
     } finally {
       setLoading(false);
@@ -83,55 +96,72 @@ const EditMedicine = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Edit Medicine</h1>
+    <div className="max-w-2xl mx-auto bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
+      <div className="flex items-center gap-3 mb-8">
+        <div className="bg-blue-100 p-3 rounded-xl text-blue-600"><FaEdit size={22}/></div>
+        <h1 className="text-2xl font-bold text-slate-800">Edit Medicine Details</h1>
+      </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input type="text" name="name" value={medicine.name}
-          onChange={handleChange} placeholder="Medicine Name"
-          className="w-full border p-2 rounded" required />
-
-        <textarea name="description" value={medicine.description || ""}
-          onChange={handleChange} placeholder="Description"
-          className="w-full border p-2 rounded" rows={3} />
-
-        <input type="number" name="price" value={medicine.price}
-          onChange={handleChange} placeholder="Price"
-          className="w-full border p-2 rounded" required />
-
-        <input type="number" name="stock" value={medicine.stock}
-          onChange={handleChange} placeholder="Stock"
-          className="w-full border p-2 rounded" required />
-
-        <input type="date" name="expiryDate"
-          value={medicine.expiryDate ? medicine.expiryDate.slice(0, 10) : ""}
-          onChange={handleChange} className="w-full border p-2 rounded" />
-
-        <label className="flex gap-2 items-center cursor-pointer">
-          <input type="checkbox" name="prescriptionRequired"
-            checked={medicine.prescriptionRequired} onChange={handleChange} />
-          Prescription Required
-        </label>
-
-       
-        <div className="border-2 border-dashed rounded-lg p-4 text-center">
-          <p className="text-sm text-gray-500 mb-2">
-            {preview ? "Change Image" : "Upload Image"}
-          </p>
-          <input type="file" accept="image/*" onChange={handleImageChange} />
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="md:col-span-2">
+          <label className="block text-sm font-bold text-slate-600 mb-2">Medicine Name</label>
+          <input type="text" name="name" value={medicine.name} onChange={handleChange}
+            className="w-full border border-slate-200 p-3 rounded-xl outline-none focus:border-blue-500" required />
         </div>
 
-       
-        {preview && (
-          <img src={preview} alt="preview"
-            className="w-full h-48 object-cover rounded-lg border" />
-        )}
+        <div>
+          <label className="block text-sm font-bold text-slate-600 mb-2">Category</label>
+          <select name="category" value={medicine.category} onChange={handleChange}
+            className="w-full border border-slate-200 p-3 rounded-xl outline-none focus:border-blue-500" required>
+            <option value="">Select Category</option>
+            {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-bold text-slate-600 mb-2">Price (₹)</label>
+          <input type="number" name="price" value={medicine.price} onChange={handleChange}
+            className="w-full border border-slate-200 p-3 rounded-xl outline-none focus:border-blue-500" required />
+        </div>
+
+        <div>
+          <label className="block text-sm font-bold text-slate-600 mb-2">Stock Level</label>
+          <input type="number" name="stock" value={medicine.stock} onChange={handleChange}
+            className="w-full border border-slate-200 p-3 rounded-xl outline-none focus:border-blue-500" required />
+        </div>
+
+        <div>
+          <label className="block text-sm font-bold text-slate-600 mb-2">Expiry Date</label>
+          <input type="date" name="expiryDate" 
+            value={medicine.expiryDate ? medicine.expiryDate.slice(0, 10) : ""} 
+            onChange={handleChange} className="w-full border border-slate-200 p-3 rounded-xl outline-none" />
+        </div>
+
+        <div className="md:col-span-2">
+          <label className="flex gap-3 items-center cursor-pointer bg-slate-50 p-4 rounded-xl border border-slate-100">
+            <input type="checkbox" name="prescriptionRequired" checked={medicine.prescriptionRequired} onChange={handleChange} className="w-5 h-5 accent-blue-600" />
+            <span className="text-slate-700 font-medium">Prescription is strictly required for this medicine</span>
+          </label>
+        </div>
+
+        <div className="md:col-span-2 space-y-4">
+          <label className="block text-sm font-bold text-slate-600">Product Image</label>
+          <div className="flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-2xl p-6 hover:bg-slate-50 transition-all group">
+            <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="edit-img" />
+            <label htmlFor="edit-img" className="cursor-pointer flex flex-col items-center">
+              {preview ? (
+                <img src={preview} className="h-40 object-contain rounded-lg mb-2 shadow-sm" alt="Preview" />
+              ) : (
+                <FaImage size={40} className="text-slate-300 mb-2" />
+              )}
+              <span className="text-blue-600 font-bold text-sm">Change Product Photo</span>
+            </label>
+          </div>
+        </div>
 
         <button type="submit" disabled={loading}
-          className={`w-full py-2 rounded text-white font-semibold ${
-            loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
-          }`}>
-          {loading ? "Updating..." : "Update Medicine"}
+          className="md:col-span-2 flex items-center justify-center gap-2 bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 shadow-lg shadow-blue-100 transition-all disabled:bg-slate-300">
+          <FaSave /> {loading ? "Updating..." : "Save Changes"}
         </button>
       </form>
     </div>

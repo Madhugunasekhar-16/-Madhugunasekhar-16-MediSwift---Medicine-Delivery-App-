@@ -52,11 +52,11 @@ const Register = () => {
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-blue-100 via-white to-blue-50 flex items-center justify-center px-6 relative overflow-hidden font-sans">
       
-      {/* Background Blobs */}
+     
       <div className="absolute top-20 right-20 w-80 h-80 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
       <div className="absolute bottom-20 left-20 w-80 h-80 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse delay-700"></div>
 
-      {/* THE GLASS CARD */}
+   
       <div className="relative z-10 w-full max-w-md bg-white/70 backdrop-blur-xl border border-white/40 p-10 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)]">
         
         <div className="text-center mb-8">
@@ -67,12 +67,12 @@ const Register = () => {
           <p className="text-gray-500 mt-2">Join MediSwift for authentic medicines</p>
         </div>
 
-        {/* Feedback Messages */}
+       
         {message && <div className="bg-green-100 text-green-700 text-sm text-center mb-4 py-2 rounded-xl">{message}</div>}
         {error && <div className="bg-red-100 text-red-700 text-sm text-center mb-4 py-2 rounded-xl">{error}</div>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Full Name */}
+          
           <div className="relative">
             <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
             <input 
@@ -85,7 +85,7 @@ const Register = () => {
             />
           </div>
 
-          {/* Email */}
+         
           <div className="relative">
             <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
             <input 
@@ -98,7 +98,7 @@ const Register = () => {
             />
           </div>
 
-          {/* Password */}
+          
           <div className="relative">
             <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
             <input 

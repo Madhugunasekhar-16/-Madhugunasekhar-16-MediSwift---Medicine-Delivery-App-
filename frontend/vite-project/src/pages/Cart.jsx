@@ -124,7 +124,7 @@ const Cart = () => {
 
         <h2 className="text-3xl font-bold mb-8">Your Cart</h2>
 
-        {/* GLOBAL ERROR ALERT */}
+       
         {error && (
           <div className="bg-red-100 text-red-700 p-3 rounded mb-6 text-center">
             {error}

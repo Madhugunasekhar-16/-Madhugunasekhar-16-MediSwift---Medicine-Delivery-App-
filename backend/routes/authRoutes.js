@@ -5,14 +5,14 @@ const User = require("../models/user.js");
 
 const router = express.Router();
 
-router.post("/register", registerUser);   //register route 
+router.post("/register", registerUser);    
 
-router.post("/login", loginUser);   //login route
+router.post("/login", loginUser);   
 
-// Test protected route
+
 router.get("/profile", protect, getUserProfile);
 
-//Admin role route
+
 router.get("/admin", protect, adminOnly, (req,res) =>{
     res.status(403).json({
         message : "Welcome Admin"

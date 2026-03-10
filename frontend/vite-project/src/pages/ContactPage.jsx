@@ -24,7 +24,7 @@ const ContactPage = () => {
     <div className="min-h-screen bg-[#EEF4FF] py-10 md:py-16 lg:py-24 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
         
-        {/* Left Side: Contact Info - Stacks on top for Mobile */}
+       
         <div className="bg-white p-6 sm:p-10 rounded-[1.5rem] md:rounded-[2.5rem] shadow-sm flex flex-col justify-center">
           <div className="text-center lg:text-left">
             <h1 className="text-3xl md:text-4xl font-extrabold text-slate-800 mb-4">Get In Touch</h1>
@@ -34,7 +34,7 @@ const ContactPage = () => {
           </div>
 
           <div className="space-y-6 md:space-y-8">
-            {/* Email */}
+           
             <div className="flex flex-col sm:flex-row items-center lg:items-start gap-4 text-center sm:text-left">
               <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-xl shrink-0">
                 <FaEnvelope />
@@ -45,7 +45,7 @@ const ContactPage = () => {
               </div>
             </div>
 
-            {/* Phone */}
+         
             <div className="flex flex-col sm:flex-row items-center lg:items-start gap-4 text-center sm:text-left">
               <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-xl shrink-0">
                 <FaPhoneAlt />
@@ -56,7 +56,7 @@ const ContactPage = () => {
               </div>
             </div>
 
-            {/* Address */}
+          
             <div className="flex flex-col sm:flex-row items-center lg:items-start gap-4 text-center sm:text-left">
               <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-xl shrink-0">
                 <FaMapMarkerAlt />
@@ -69,7 +69,7 @@ const ContactPage = () => {
           </div>
         </div>
 
-        {/* Right Side: Send Message Form */}
+        
         <div className="bg-white p-6 sm:p-10 rounded-[1.5rem] md:rounded-[2.5rem] shadow-sm border border-slate-100">
           <h2 className="text-xl md:text-2xl font-bold text-slate-800 mb-8 text-center lg:text-left">Send Message</h2>
           <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">

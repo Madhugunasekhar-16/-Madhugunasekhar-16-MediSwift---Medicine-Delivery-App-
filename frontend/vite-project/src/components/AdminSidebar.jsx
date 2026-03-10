@@ -21,7 +21,7 @@ const AdminSidebar = () => {
     navigate("/login");
   };
 
-  // Logic for the active link styling
+  
   const getNavLinkClass = ({ isActive }) =>
     `flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all duration-200 ${
       isActive
@@ -32,7 +32,7 @@ const AdminSidebar = () => {
   return (
     <div className="w-64 min-h-screen bg-white border-r border-slate-200 flex flex-col justify-between p-6 sticky top-0 shadow-sm">
       <div>
-        {/* Brand Header */}
+        
         <div className="mb-10 px-2">
           <h2 className="text-2xl font-black tracking-tight">
             <span className="text-blue-600">Medi</span>
@@ -41,7 +41,7 @@ const AdminSidebar = () => {
           </h2>
         </div>
 
-        {/* Main Menu Section */}
+        
         <div className="space-y-1">
           <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-2">Main Menu</p>
           <nav className="flex flex-col gap-1">
@@ -62,7 +62,7 @@ const AdminSidebar = () => {
 
         <hr className="border-slate-100 my-8" />
 
-        {/* Secondary Menu Section */}
+        
         <div className="space-y-1">
           <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-2">Exit Admin</p>
           <nav className="flex flex-col gap-1">
@@ -76,7 +76,7 @@ const AdminSidebar = () => {
         </div>
       </div>
 
-      {/* Logout Footer */}
+    
       <div className="pt-6 border-t border-slate-100">
         <button
           onClick={handleLogout}

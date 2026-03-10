@@ -6,7 +6,7 @@ const Home = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // ADMIN REDIRECT GUARD
+ 
   useEffect(() => {
     if (user?.role === "admin") {
       navigate("/admin/dashboard");
@@ -17,7 +17,7 @@ const Home = () => {
     <div className="bg-[#fdfbf9] min-h-screen">
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center px-8 py-20">
         
-        {/* LEFT CONTENT */}
+       
         <div>
           <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 leading-[1.1]">
             Healthcare <span className="text-blue-600">Simplified</span>,
@@ -46,7 +46,7 @@ const Home = () => {
             )}
           </div>
 
-          {/* PHARMACY STATS */}
+        
           <div className="flex gap-12 mt-16 border-t border-gray-100 pt-8">
             <div>
               <h2 className="text-3xl font-bold text-gray-900">500+</h2>
@@ -63,7 +63,7 @@ const Home = () => {
           </div>
         </div>
 
-        {/* RIGHT HERO IMAGE */}
+        
         <div className="relative">
           <div className="absolute -inset-4 bg-blue-100 rounded-3xl rotate-3 -z-10"></div>
           <img

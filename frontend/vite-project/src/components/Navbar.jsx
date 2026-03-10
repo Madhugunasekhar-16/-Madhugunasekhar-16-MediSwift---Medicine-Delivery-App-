@@ -47,7 +47,6 @@ const Navbar = () => {
         <span className="text-blue-600">Medi</span><span className="text-slate-800">Swift</span>
       </Link>
 
-      {/* MOBILE ACTIONS */}
       <div className="flex items-center gap-3 md:hidden z-[101]">
         {user && user.role !== "admin" && (
           <Link to="/cart" className="relative text-blue-600 text-xl p-2">
@@ -62,12 +61,12 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* DESKTOP NAV */}
+     
       <div className="hidden md:flex items-center gap-1">
         <Link to="/" className={navLinkClasses}>Home</Link>
         <Link to="/medicines" className={navLinkClasses}>Medicines</Link>
         
-        {/* LOGIC: Hide when logged in */}
+       
         {!user && (
           <>
             <Link to="/about" className={navLinkClasses}>About Us</Link>
@@ -99,13 +98,13 @@ const Navbar = () => {
         )}
       </div>
 
-      {/* MOBILE OVERLAY */}
+      
       <div className={`fixed inset-0 bg-white z-[100] transition-transform duration-300 transform ${isMenuOpen ? "translate-y-0" : "-translate-y-full"} md:hidden pt-20 px-6`}>
         <div className="flex flex-col">
           <Link to="/" onClick={() => setIsMenuOpen(false)} className={mobileLinkClasses}>Home</Link>
           <Link to="/medicines" onClick={() => setIsMenuOpen(false)} className={mobileLinkClasses}>Medicines</Link>
           
-          {/* LOGIC: Hide when logged in */}
+         
           {!user && (
             <>
               <Link to="/about" onClick={() => setIsMenuOpen(false)} className={mobileLinkClasses}>About Us</Link>

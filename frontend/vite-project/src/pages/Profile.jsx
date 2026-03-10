@@ -11,7 +11,7 @@ const Profile = () => {
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  // Update Name
+  
   const handleUpdate = async (e) => {
     e.preventDefault();
 
@@ -39,7 +39,7 @@ const Profile = () => {
 
       setMessage("Profile updated successfully");
 
-      // refresh navbar username
+      
       window.location.reload();
 
     } catch (error) {
@@ -48,7 +48,7 @@ const Profile = () => {
     }
   };
 
-  // Change Password
+ 
   const handlePasswordUpdate = async (e) => {
     e.preventDefault();
 
@@ -99,7 +99,7 @@ const Profile = () => {
         </div>
       )}
 
-      {/* Update Profile */}
+      
       <form onSubmit={handleUpdate} className="space-y-4">
 
         <div>
@@ -131,10 +131,10 @@ const Profile = () => {
 
       </form>
 
-      {/* Divider */}
+    
       <hr className="my-6" />
 
-      {/* Change Password */}
+    
       <h2 className="text-xl font-semibold mb-4">Change Password</h2>
 
       <form onSubmit={handlePasswordUpdate} className="space-y-4">

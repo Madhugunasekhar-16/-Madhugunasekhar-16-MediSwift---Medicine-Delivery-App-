@@ -20,7 +20,7 @@ const protect = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    //  Supports both {id} and {_id}
+    
     const userId = decoded.id || decoded._id;
 
     if (!userId) {

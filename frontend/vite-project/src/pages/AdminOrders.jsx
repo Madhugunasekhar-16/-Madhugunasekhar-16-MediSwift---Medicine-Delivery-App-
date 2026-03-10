@@ -35,7 +35,7 @@ const AdminOrders = () => {
     fetchOrders();
   }, []);
 
-  // Update Order Status
+  
   const handleStatusChange = async (id, newStatus) => {
     try {
       const token = localStorage.getItem("token");

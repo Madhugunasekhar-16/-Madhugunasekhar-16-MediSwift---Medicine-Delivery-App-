@@ -14,7 +14,7 @@ import AdminOrders from "./pages/AdminOrders";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminMedicines from "./pages/AdminMedicines";
 import EditMedicine from "./pages/EditMedicines";
-import AddMedicine from "./pages/AddMedicines";
+import AddMedicine from "./pages/AddMedicine";
 import AdminUsers from "./pages/AdminUsers";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
@@ -48,7 +48,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           
-          {/* Redirect logged-in users away from marketing pages */}
+         
           <Route 
             path="/about" 
             element={user ? <Navigate to="/" replace /> : <AboutPage />} 
@@ -67,7 +67,7 @@ function App() {
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/my-orders" element={<ProtectedRoute><MyOrders /></ProtectedRoute>} />
 
-          {/* NESTED ADMIN ROUTES */}
+        
           <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="orders" element={<AdminOrders />} />

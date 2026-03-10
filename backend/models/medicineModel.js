@@ -6,6 +6,11 @@ const medicineSchema = new mongoose.Schema(
             type : String,
             required : true,
         },
+        category: { 
+            type: String, 
+            required: true, 
+            enum: ["Pain Relief", "Antibiotics", "Diabetes Care", "Heart Health", "Digestive Health", "Vitamins", "Personal Care"] 
+        },
         description : {
             type : String,
             required : true,

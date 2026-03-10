@@ -5,11 +5,11 @@ const { addMedicine, getAllMedicines, getMedicineById, updateMedicine, deleteMed
 const { protect, adminOnly } = require("../middleware/authMiddleware.js");
 
 router.get("/", getAllMedicines);
-router.get("/:id", getMedicineById); //  needed for EditMedicine page
+router.get("/:id", getMedicineById); 
 
-router.post("/", protect, adminOnly, upload.single("image"), addMedicine); //  single route only
+router.post("/", protect, adminOnly, upload.single("image"), addMedicine); 
 
-router.put("/:id", protect, adminOnly, upload.single("image"), updateMedicine); //  supports image update
+router.put("/:id", protect, adminOnly, upload.single("image"), updateMedicine); 
 
 router.delete("/:id", protect, adminOnly, deleteMedicine);
 
