@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaPlus, FaTrash, FaPen } from "react-icons/fa";
+import { FaPlus, FaTrash, FaPen, FaSearch, FaTimes } from "react-icons/fa";
 
 const AdminMedicines = () => {
   const navigate = useNavigate();
   const [medicines, setMedicines] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
     const fetchMedicines = async () => {
@@ -39,6 +41,19 @@ const AdminMedicines = () => {
     }
   };
 
+  const handleClearFilters = () => {
+    setSearchTerm("");
+    setSelectedCategory("All");
+  };
+
+  const categories = ["All", ...new Set(medicines.map((m) => m.category))];
+
+  const filteredMedicines = medicines.filter((med) => {
+    const matchesSearch = med.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === "All" || med.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-8">
@@ -49,18 +64,57 @@ const AdminMedicines = () => {
         </button>
       </div>
 
+      <div className="flex flex-col md:flex-row gap-4 mb-6 items-center justify-between">
+        
+        <div className="flex items-center gap-3 w-full md:w-auto">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Category</span>
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="bg-white border border-slate-200 text-slate-700 py-2 px-4 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none cursor-pointer text-sm font-medium"
+            >
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
+          </div>
+
+          {(searchTerm !== "" || selectedCategory !== "All") && (
+            <button
+              onClick={handleClearFilters}
+              className="flex items-center gap-1 text-xs font-bold text-red-500 hover:text-red-600 bg-red-50 px-3 py-2 rounded-lg transition-colors"
+            >
+              <FaTimes size={10} /> Clear
+            </button>
+          )}
+        </div>
+
+       
+        <div className="relative w-full md:w-80">
+          <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 size-3.5" />
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-11 pr-4 py-2 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm shadow-sm"
+          />
+        </div>
+      </div>
+
       <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
         <table className="w-full">
           <thead className="bg-slate-50 border-b border-slate-100">
             <tr className="text-slate-500 text-sm">
-              <th className="p-5 font-bold">Product</th>
-              <th className="p-5 font-bold">Price</th>
-              <th className="p-5 font-bold">Stock</th>
+              <th className="p-5 font-bold text-left">Product</th>
+              <th className="p-5 font-bold text-left">Price</th>
+              <th className="p-5 font-bold text-left">Stock</th>
               <th className="p-5 font-bold text-center">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-50">
-            {medicines.map((med) => (
+            {filteredMedicines.map((med) => (
               <tr key={med._id} className="hover:bg-slate-50/50 transition-colors">
                 <td className="p-5">
                   <div className="flex items-center gap-4">
@@ -76,9 +130,6 @@ const AdminMedicines = () => {
                   <span className={`px-3 py-1 rounded-lg text-xs font-bold ${med.stock > 0 ? "bg-green-50 text-green-600" : "bg-red-50 text-red-600"}`}>
                     {med.stock} units
                   </span>
-                </td>
-                <td className="p-5">
-                  {med.prescriptionRequired ? <span className="text-[10px] bg-orange-100 text-orange-600 px-2 py-1 rounded-md font-bold uppercase">Rx</span> : <span className="text-slate-300">-</span>}
                 </td>
                 <td className="p-5">
                   <div className="flex justify-center gap-2">
